@@ -30,11 +30,11 @@ public class Ticket {
     @FutureOrPresent(message = "La data di creazione non può essere passata")
     private LocalDateTime dataCreazione;
 
-    @OneToMany(mappedBy = "ticket")
-    private List<Nota> note;
-
     @NotNull(message = "Lo stato non può essere vuoto!")
     private String stato;
+
+    @OneToMany(mappedBy = "ticket")
+    private List<Nota> note;
 
     public List<Nota> getNote() {
         return this.note;
