@@ -7,7 +7,7 @@
     <nav th:insert="~{fragments/navbar ::navbar}"></nav>
 
     <main class="container">
-        <h1 class="text-center">Indice dei ticket</h1>
+        <h1 class="text-center">Dettagli ticket</h1>
 
         <table class="table table-info table-striped">
             <thead>
@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="ticket : ${tickets}" th:object="${ticket}">
+                <tr th:object="${ticket}">
                     <td>[[*{id}]]</td>
                     <td>[[*{titolo}]]</td>
                     <td>[[*{nomeProdotto}]]</td>

@@ -1,6 +1,7 @@
 package org.milestone.wdpt6.ticketplatform.ticket_platform.model;
 
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
@@ -11,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -28,6 +30,9 @@ public class User {
     @NotNull (message =  "La password non può essere vuota")
     private String password;
 
+    
+    private String statoPersonale;
+
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_role",
@@ -35,6 +40,29 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id") 
     )
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    private List<Ticket> tickets;
+
+
+    public List<Ticket> getTickets() {
+        return this.tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
+
+
+    public String getStatoPersonale() {
+        return this.statoPersonale;
+    }
+
+    public void setStatoPersonale(String statoPersonale) {
+        this.statoPersonale = statoPersonale;
+    }
+
+
 
 
     public Set<Role> getRoles() {

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/head :: head('Home')}">
+
+<body class="bg-secondary-subtle">
+    <nav th:insert="~{fragments/navbar ::navbar}"></nav>
+
+    <main class="container">
+        <h1 class="text-center">Indice dei ticket</h1>
+        <a href="tickets/create" class="btn btn-primary">Crea Ticket</a>
+
+        <table class="table table-info table-striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Titolo ticket</th>
+                    <th>Prodotto di riferimento</th>
+                    <th>Data Creazione</th>
+                    <th>Stato</th>
+                    <th>Operatore</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ticket : ${tickets}" th:object="${ticket}">
+                    <td>[[*{id}]]</td>
+                    <td>[[*{titolo}]]</td>
+                    <td>[[*{nomeProdotto}]]</td>
+                    <td>[[*{dataCreazione}]]</td>
+                    <td>[[*{stato}]]</td>
+                    <td>[[*{user.email}]]</td>                    
+                    <td>
+                        <a th:href="@{ticket/{id}(id=*{id})}" class="btn btn-primary">Mostra</a>
+                        <a href="@{ticket/{id}/edit(id=*{id})}" class="btn btn-warning">Modifica</a>
+                        <a href="@{ticket/{id}/delete(id=*{id})}" class="btn btn-secondary">Elimina</a>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+
+    </main>
+
+    <th:block th:insert="~{fragments/footer :: script}"></th:block>
+</body>
+
+</html>

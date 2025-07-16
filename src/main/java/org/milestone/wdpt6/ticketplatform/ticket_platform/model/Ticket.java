@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -20,7 +22,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "Il titolo del ticker non può essere vuoto!")
+    @NotNull(message = "Il titolo del ticket non può essere vuoto!")
     private String titolo;
 
     @NotNull(message = "Il nome del prodotto non può essere vuoto!")
@@ -35,6 +37,21 @@ public class Ticket {
 
     @OneToMany(mappedBy = "ticket")
     private List<Nota> note;
+
+    @ManyToOne
+    @JoinColumn (name = "user_id", nullable = false)
+    @NotNull (message = "Inserisci un operatore")
+    private User user;
+
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
 
     public List<Nota> getNote() {
         return this.note;
