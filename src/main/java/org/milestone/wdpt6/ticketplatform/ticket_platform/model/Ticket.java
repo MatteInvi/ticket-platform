@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -22,10 +23,10 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "Il titolo del ticket non può essere vuoto!")
+    @NotBlank(message = "Il titolo del ticket non può essere vuoto!")
     private String titolo;
 
-    @NotNull(message = "Il nome del prodotto non può essere vuoto!")
+    @NotBlank(message = "Il nome del prodotto non può essere vuoto!")
     private String nomeProdotto;
 
     @NotNull(message = "Inserisci la data di creazione!")
@@ -39,8 +40,8 @@ public class Ticket {
     private List<Nota> note;
 
     @ManyToOne
-    @JoinColumn (name = "user_id", nullable = false)
-    @NotNull (message = "Inserisci un operatore")
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(message = "Inserisci un operatore")
     private User user;
 
 

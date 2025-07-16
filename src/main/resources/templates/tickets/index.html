@@ -18,7 +18,6 @@
                     <th>Prodotto di riferimento</th>
                     <th>Data Creazione</th>
                     <th>Stato</th>
-                    <th>Operatore</th>
                     <th></th>
                 </tr>
             </thead>
@@ -28,12 +27,11 @@
                     <td>[[*{titolo}]]</td>
                     <td>[[*{nomeProdotto}]]</td>
                     <td>[[*{dataCreazione}]]</td>
-                    <td>[[*{stato}]]</td>
-                    <td>[[*{user.email}]]</td>                    
+                    <td>[[*{stato}]]</td>                                     
                     <td>
-                        <a th:href="@{ticket/{id}(id=*{id})}" class="btn btn-primary">Mostra</a>
-                        <a href="@{ticket/{id}/edit(id=*{id})}" class="btn btn-warning">Modifica</a>
-                        <a href="@{ticket/{id}/delete(id=*{id})}" class="btn btn-secondary">Elimina</a>
+                        <a th:href="@{tickets/{id}(id=*{id})}" class="btn btn-primary">Mostra</a>
+                        <a th:href="@{tickets/{id}/edit(id=*{id})}" class="btn btn-warning">Modifica</a>
+                        <a th:href="@{|/tickets/*{id}/delete|}" class="btn btn-secondary">Elimina</a>
                     </td>
                 </tr>
             </tbody>

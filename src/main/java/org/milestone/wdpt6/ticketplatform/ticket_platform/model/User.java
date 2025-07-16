@@ -24,6 +24,9 @@ public class User {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull (message = "Il nome non può essere vuoto!")
+    private String nome;
+
     @NotNull (message = "Il nome dell'utente non può essere vuoto!")
     private String email;
 
@@ -60,6 +63,15 @@ public class User {
 
     public void setStatoPersonale(String statoPersonale) {
         this.statoPersonale = statoPersonale;
+    }
+ 
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
 

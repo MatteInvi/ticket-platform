@@ -45,7 +45,7 @@ public class TicketController {
     }
 
     @PostMapping
-    public String store(@Valid @ModelAttribute Ticket formTicket, BindingResult bindingResult, Model model) {
+    public String store(@Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("users", userRepository.findAll());
             return "tickets/create";
@@ -57,7 +57,27 @@ public class TicketController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Integer id) {
         model.addAttribute("ticket", ticketRepository.findById(id).get());
+        model.addAttribute("users", userRepository.findAll());
         return "tickets/edit";
+    }
+
+    @PostMapping("/{id}")
+    public String update(@PathVariable Integer id, @Valid @ModelAttribute("ticket") Ticket formTicket,
+            BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("users", userRepository.findAll());
+            return "tickets/edit";
+        }
+
+        ticketRepository.save(formTicket);
+        return "redirect:/tickets";
+    }
+
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable Integer id) {
+        Ticket ticketDaEliminare = ticketRepository.findById(id).get();
+        ticketRepository.delete(ticketDaEliminare);
+        return "redirect:/tickets";
     }
 
 }
