@@ -3,14 +3,15 @@
 
 <head th:replace="~{fragments/head :: head('Home')}">
 
-<body>
+<body class="bg-secondary-subtle">
+    <nav th:insert="~{fragments/navbar ::navbar}"></nav>
+    <main class="container">
+        <h1 class="text-center">Homepage</h1>
 
-    <h1>Home</h1>
+    </main>
 
 
-
-
-    <th:block th:insers="~{fragments/footer :: script}"></th:block>
+    <th:block th:insert="~{fragments/footer :: script}"></th:block>
 </body>
 
 </html>

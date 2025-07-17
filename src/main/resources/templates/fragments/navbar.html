@@ -20,7 +20,12 @@
           </li>
         </ul>
 
+        <div class="mx-2">
+         <a th:href="@{/user/show}" class="btn btn-warning">Dettagli utente</a>
+        </div>
+
         <div sec:authorize="isAuthenticated()" class="user-details text-light-emphasis">
+
           Nome utente: <span sec:authentication="name" class="me-3"></span>
           Ruolo: <span sec:authentication="principal.authorities" class="me-3"></span>
 
