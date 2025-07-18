@@ -1,6 +1,8 @@
 package org.milestone.wdpt6.ticketplatform.ticket_platform.controller;
 
+import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Nota;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
+import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.NotaRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.TicketRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class TicketController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    NotaRepository notaRepository;
+
     @GetMapping
     public String index(Model model) {
         model.addAttribute("tickets", ticketRepository.findAll());
@@ -34,6 +39,7 @@ public class TicketController {
     @GetMapping("/{id}")
     public String show(Model model, @PathVariable Integer id) {
         model.addAttribute("ticket", ticketRepository.findById(id).get());
+        model.addAttribute("note", notaRepository.findAll());
         return "tickets/show";
     }
 
@@ -78,6 +84,15 @@ public class TicketController {
         Ticket ticketDaEliminare = ticketRepository.findById(id).get();
         ticketRepository.delete(ticketDaEliminare);
         return "redirect:/tickets";
+    }
+
+    @GetMapping("/{id}/nota")
+    public String nota(@PathVariable Integer id, Model model) {
+        Nota nota = new Nota();
+        nota.setTicket(ticketRepository.findById(id).get());
+        model.addAttribute("ticket", ticketRepository.findById(id).get());
+        model.addAttribute("nota", nota);
+        return "note/create";
     }
 
 }

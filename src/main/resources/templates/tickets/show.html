@@ -29,11 +29,23 @@
                     <td>[[*{dataCreazione}]]</td>
                     <td>[[*{stato}]]</td>
                     <td>[[*{user.nome}]]</td>
-                    <td></td>
+                    <td>
+                        <a th:href="@{|/tickets/{id}/nota|(id=*{id})}" class="btn btn-primary">Aggiungi nota</a>
+                    </td>
                 </tr>
             </tbody>
 
         </table>
+
+        <h3>Note</h3>
+
+        <ul th:each="nota : ${ticket.note}">
+            <li>[[${nota.id}]]</li>
+            <li>[[${nota.titolo}]]</li>
+            <li>[[${nota.testoNota}]]</li>
+            <li>[[${nota.dataCreazione}]]</li>
+        </ul>
+
 
 
     </main>
