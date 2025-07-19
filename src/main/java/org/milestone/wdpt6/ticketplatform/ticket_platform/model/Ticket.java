@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 @Table(name = "tickets")
@@ -30,7 +31,7 @@ public class Ticket {
     private String nomeProdotto;
 
     @NotNull(message = "Inserisci la data di creazione!")
-    @FutureOrPresent(message = "La data di creazione non può essere passata")
+    @PastOrPresent(message = "La data di creazione non può essere nel futuro")
     private LocalDateTime dataCreazione;
 
     @NotNull(message = "Lo stato non può essere vuoto!")

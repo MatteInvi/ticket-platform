@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -21,10 +22,10 @@ public class Nota {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull (message = "Il titolo non può essere vuoto!")
+    @NotBlank (message = "Il titolo non può essere vuoto!")
     private String titolo;
 
-    @NotNull (message = "Il testo della nota non può essere vuoto!")
+    @NotBlank (message = "Il testo della nota non può essere vuoto!")
     private String testoNota;
 
     @NotNull (message = "La data di creazione non può essere vuota!")

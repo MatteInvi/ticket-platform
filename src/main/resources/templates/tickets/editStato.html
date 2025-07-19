@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/head :: head('Crea ticket')}">
+
+<body>
+
+    <nav th:insert="~{fragments/navbar :: navbar}"></nav>
+    <main class="container">
+
+        <div class="row justify-content-center">
+            <h1 class="text-center">Modifica Stato ticket [[${ticket.id}]]</h1>
+            <div class="col-4">
+                
+                <form th:action="@{/tickets/{id}/editStato(id=${ticket.id})}" method="POST" th:object="${ticket}">
+                    <div class="mb-3">
+                        <label for="stato">Stato</label>
+                        <select type="text" id="stato" class="form-select" th:field="*{stato}"
+                            th:errorClass="is-invalid">
+                            <option value="Da Fare">Da fare</option>
+                            <option value="In Corso">In Corso</option>
+                            <option value="Completato">Completato</option>
+                        </select>
+
+                        <div th:if="${#fields.hasErrors('stato')}" class="invalid-feedback">
+                            <ul>
+                                <li th:each="error : ${#fields.errors('stato')}" th:text="${error}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <input type="hidden" th:field="*{titolo}">
+                    <input type="hidden" th:field="*{dataCreazione}">
+                    <input type="hidden" th:field="*{nomeProdotto}">
+                    <input type="hidden" th:field="*{user.id}">
+                    <div class="mb-3">
+                        <button class="btn btn-primary" type="submit">Modifica Stato</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <th:block th:insert="~{fragments/footer :: script}"></th:block>
+</body>
+
+</html>

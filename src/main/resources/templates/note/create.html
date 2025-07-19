@@ -4,10 +4,10 @@
 <head th:replace="~{fragments/head :: head('Crea nota')}">
 
 <body>
-         
-        <nav th:insert="~{fragments/navbar :: navbar}"></nav>
+
+    <nav th:insert="~{fragments/navbar :: navbar}"></nav>
     <main class="container">
-   
+
         <h1>Crea una nuova nota</h1>
         <form th:action="@{/note}" method="POST" th:object="${nota}">
             <div class="mb-3">
@@ -24,8 +24,8 @@
 
             <div class="mb-3">
                 <label for="testo_nota">Testo nota:</label>
-                <input type="text" id="test_nota" class="form-control" th:field="*{testoNota}"
-                    th:errorClass="is-invalid">
+                <textarea id="test_nota" class="form-control" th:field="*{testoNota}" th:errorClass="is-invalid">
+                </textarea>
 
                 <div th:if="${#fields.hasErrors('testoNota')}" class="invalid-feedback">
                     <ul>

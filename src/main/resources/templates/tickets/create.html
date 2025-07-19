@@ -36,7 +36,7 @@
 
             <div class="mb-3">
                 <label for="data_creazione">Data creazione</label>
-                <input type="datetime-local" id="data_creazione" class="form-control" th:field="*{dataCreazione}"
+                <input type="datetime-local" id="data_creazione" class="form-control" th:value="*{dataCreazione}" th:field="*{dataCreazione}"
                     th:errorClass="is-invalid">
 
                 <div th:if="${#fields.hasErrors('dataCreazione')}" class="invalid-feedback">
