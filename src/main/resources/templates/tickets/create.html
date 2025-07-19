@@ -63,9 +63,9 @@
                 <label for="stato">Stato</label>
                 <select type="text" id="stato" class="form-select" th:field="*{stato}"
                     th:errorClass="is-invalid">
-                    <option value="daFare">Da fare</option>
-                    <option value="inCorso">In Corso</option>
-                    <option value="completato">Completato</option>
+                    <option value="Da fare">Da fare</option>
+                    <option value="In corso">In Corso</option>
+                    <option value="Completato">Completato</option>
                 </select>
 
                 <div th:if="${#fields.hasErrors('stato')}" class="invalid-feedback">

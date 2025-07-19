@@ -20,7 +20,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers("/tickets/create", "/tickets/*/edit").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/tickets/**", "/tickets/*/delete").hasAuthority("ADMIN")                
-                .requestMatchers("/tickets", "/tickets/**").hasAnyAuthority("OPERATORE", "ADMIN")
+                .requestMatchers("/tickets", "/tickets/*").hasAnyAuthority("OPERATORE", "ADMIN")
                 .requestMatchers("/**").permitAll()
             )
                 .formLogin(Customizer.withDefaults());

@@ -23,7 +23,6 @@ public class DatabaseUserDetails implements UserDetails {
         this.username = user.getEmail();
         this.password = user.getPassword();
 
-        // popolare le authorities
         this.authorities = new HashSet<>();
 
         for (Role role : user.getRoles() ){

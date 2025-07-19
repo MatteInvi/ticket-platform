@@ -2,12 +2,11 @@ package org.milestone.wdpt6.ticketplatform.ticket_platform.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Nota;
+import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Role;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.User;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.NotaRepository;
@@ -16,6 +15,7 @@ import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.UserReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,8 +41,22 @@ public class TicketController {
     NotaRepository notaRepository;
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("tickets", ticketRepository.findAll());
+    public String index(Model model, Authentication authentication) {
+       Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
+       List<Ticket> ticketPerUtente = new ArrayList<>();
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            if (authority.getAuthority().equals("ADMIN")) {
+                model.addAttribute("tickets", ticketRepository.findAll());
+            } else if (authority.getAuthority().equals("OPERATORE")){
+                for (Ticket singleTicket : ticketRepository.findAll()) {
+                    if (singleTicket.getUser().equals(utenteLoggato.get())){
+                        ticketPerUtente.add(singleTicket);
+                    }                    
+                }
+                model.addAttribute("tickets", ticketPerUtente);
+            }
+        }
+
         return "tickets/index";
     }
 
@@ -54,22 +68,31 @@ public class TicketController {
     }
 
     @GetMapping("/create")
-    public String create(Model model, Authentication authentication) {
+    public String create(Model model) {
         Ticket ticket = new Ticket();
         List<User> utentiAttivi = new ArrayList<>();
-
+        boolean isOperatore = false;
+        // Verifico se l'utente è un operatore
         for (User singelUser : userRepository.findAll()) {
-            if (singelUser.getStatoPersonale().equals("Attivo") && singelUser.getRoles().){ // iniziare da qui
+            for (Role ruolo : singelUser.getRoles()) {
+                if (ruolo.getNome().equals("OPERATORE")) {
+                    isOperatore = true;
+                    break;
+                }
+            }
+            // Verifico se l'utente è attivo
+            // In caso di esito positivo per entrambe lo aggiungo alla lista da mostrare
+            // nella creazione ticket
+            if (singelUser.getStatoPersonale().equals("Attivo") && isOperatore) {
                 utentiAttivi.add(singelUser);
+            }
         }
-    }
         ticket.setDataCreazione(LocalDateTime.now());
         model.addAttribute("ticket", ticket);
         model.addAttribute("users", utentiAttivi);
         return "tickets/create";
-    
-    
-}
+
+    }
 
     @PostMapping
     public String store(@Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult, Model model) {
@@ -84,10 +107,21 @@ public class TicketController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Integer id) {
         List<User> utentiAttivi = new ArrayList<>();
-
+        boolean isOperatore = false;
+        // Verifico se l'utente è un operatore
         for (User singelUser : userRepository.findAll()) {
-            if (singelUser.getStatoPersonale().equals("Attivo"))
+            for (Role ruolo : singelUser.getRoles()) {
+                if (ruolo.getNome().equals("OPERATORE")) {
+                    isOperatore = true;
+                    break;
+                }
+            }
+            // Verifico se l'utente è attivo
+            // In caso di esito positivo per entrambe lo aggiungo alla lista da mostrare
+            // nella creazione ticket
+            if (singelUser.getStatoPersonale().equals("Attivo") && isOperatore) {
                 utentiAttivi.add(singelUser);
+            }
         }
         model.addAttribute("ticket", ticketRepository.findById(id).get());
         model.addAttribute("users", utentiAttivi);

@@ -2,7 +2,6 @@ package org.milestone.wdpt6.ticketplatform.ticket_platform.controller;
 
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Nota;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.NotaRepository;
-import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
