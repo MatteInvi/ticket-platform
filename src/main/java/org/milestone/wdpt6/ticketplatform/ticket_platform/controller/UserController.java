@@ -45,7 +45,7 @@ public class UserController {
     public String updateStato(@ModelAttribute("utente") User userForm, Authentication authentication, Model model) {
         Optional<User> user = userRepository.findByEmail(authentication.getName());
         int nTicketNonCompleti = 0;
-        if (user.get().getStatoPersonale().equals("Attivo")) {
+        if (user.get().getStatoPersonale().equals("Disponibile")) {
             // Se lo stato personale è attivo esegui il controllo 
             // per vedere se deve completare dei ticket altrimenti non può modificarlo
             for (Ticket singleTicket : ticketRepository.findAll()) {

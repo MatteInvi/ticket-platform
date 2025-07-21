@@ -2,6 +2,8 @@ package org.milestone.wdpt6.ticketplatform.ticket_platform.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +23,8 @@ public class Role {
 
     @NotNull(message = "Il nome del ruole deve esistere!!")
     private String nome;
-
+    
+    @JsonBackReference
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users;
 

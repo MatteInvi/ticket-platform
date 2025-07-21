@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import jakarta.validation.Valid;
 
 @Controller
@@ -39,20 +41,26 @@ public class TicketController {
     NotaRepository notaRepository;
 
     @GetMapping
-    public String index(Model model, Authentication authentication) {
+    public String index(Model model, Authentication authentication,@RequestParam (required = false) String keyword) {
         Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
-        List<Ticket> ticketsOperatore = new ArrayList<>();
+        List<Ticket> tickets= new ArrayList<>();
+        
         // Controllo authority per mostrare i ticket giusti
         for (GrantedAuthority authority : authentication.getAuthorities()) {
             if (authority.getAuthority().equals("ADMIN")) {
-                model.addAttribute("tickets", ticketRepository.findAll());
+                if (keyword !=null && !keyword.isEmpty()){
+                    tickets = ticketRepository.findByTitoloContainingIgnoreCase(keyword);
+                } else {
+                    tickets = ticketRepository.findAll();
+                }
+                model.addAttribute("tickets", tickets);
             } else if (authority.getAuthority().equals("OPERATORE")) {
                 for (Ticket singleTicket : ticketRepository.findAll()) {
                     if (singleTicket.getUser().equals(utenteLoggato.get())) {
-                        ticketsOperatore.add(singleTicket);
+                        tickets.add(singleTicket);
                     }
                 }
-                model.addAttribute("tickets", ticketsOperatore);
+                model.addAttribute("tickets", tickets);
             }
         }
 
@@ -92,13 +100,12 @@ public class TicketController {
             for (Role ruolo : singelUser.getRoles()) {
                 if (ruolo.getNome().equals("OPERATORE")) {
                     isOperatore = true;
-                    break;
                 }
             }
             // Verifico se l'utente è attivo
             // In caso di esito positivo per entrambe lo aggiungo alla lista da mostrare
             // nella creazione ticket
-            if (singelUser.getStatoPersonale().equals("Attivo") && isOperatore) {
+            if (singelUser.getStatoPersonale().equals("Disponibile") && isOperatore) {
                 utentiAttivi.add(singelUser);
             }
         }
@@ -134,7 +141,7 @@ public class TicketController {
             // Verifico se l'utente è attivo
             // In caso di esito positivo per entrambe lo aggiungo alla lista da mostrare
             // nella modifica ticket
-            if (singelUser.getStatoPersonale().equals("Attivo") && isOperatore) {
+            if (singelUser.getStatoPersonale().equals("Disponibile") && isOperatore) {
                 utentiAttivi.add(singelUser);
             }
         }

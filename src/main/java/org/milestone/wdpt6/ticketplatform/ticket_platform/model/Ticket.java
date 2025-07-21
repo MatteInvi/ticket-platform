@@ -3,6 +3,8 @@ package org.milestone.wdpt6.ticketplatform.ticket_platform.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,10 +37,12 @@ public class Ticket {
 
     @NotNull(message = "Lo stato non può essere vuoto!")
     private String stato;
-
+    
+    @JsonBackReference
     @OneToMany(mappedBy = "ticket")
     private List<Nota> note;
-
+    
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @NotNull(message = "Inserisci un operatore")

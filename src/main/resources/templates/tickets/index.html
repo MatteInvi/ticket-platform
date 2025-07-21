@@ -8,7 +8,18 @@
 
     <main class="container">
         <h1 class="text-center">Indice dei ticket</h1>
-        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{tickets/create}" class="btn btn-primary mb-3">Crea Ticket</a>
+        <section sec:authorize="hasAuthority('ADMIN')" class="search-bar row justify-content-center mb-3">
+            <form th:action="@{/tickets}" method="GET" class="col-12 d-flex justify-content-between">
+                <div class="creation-button" >
+                    <a th:href="@{tickets/create}" class="btn btn-primary">Crea Ticket</a>
+                </div>
+                <div class="input-group w-25">
+                    <input type="search" name="keyword" class="form-control" id="cerca-ticket"
+                        placeholder="Cerca tra i ticket">
+                    <button type="submit" class="btn btn-success">Cerca</button>
+                </div>
+            </form>
+        </section>
 
         <table class="table table-info table-striped">
             <thead>
@@ -30,9 +41,10 @@
                     <td>[[*{stato}]]</td>
                     <td>
                         <a th:href="@{tickets/{id}(id=*{id})}" class="btn btn-primary">Mostra</a>
-                        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{tickets/{id}/edit(id=*{id})}" class="btn btn-warning">Modifica</a>
-                        <button sec:authorize="hasAuthority('ADMIN')" class="btn btn-secondary" type="button" data-bs-toggle="modal"
-                            th:data-bs-target="'#delete-modal-'+ *{id}">
+                        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{tickets/{id}/edit(id=*{id})}"
+                            class="btn btn-warning">Modifica</a>
+                        <button sec:authorize="hasAuthority('ADMIN')" class="btn btn-secondary" type="button"
+                            data-bs-toggle="modal" th:data-bs-target="'#delete-modal-'+ *{id}">
                             Elimina
                         </button>
 
