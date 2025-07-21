@@ -16,23 +16,23 @@ public class DatabaseUserDetails implements UserDetails {
     private final Integer id;
     private final String username;
     private final String password;
-    private final Set<GrantedAuthority> authorities;
+    private final Set<GrantedAuthority> grantedAuthorities;
 
     public DatabaseUserDetails(User user){
         this.id = user.getId();
         this.username = user.getEmail();
         this.password = user.getPassword();
 
-        this.authorities = new HashSet<>();
+        this.grantedAuthorities = new HashSet<>();
 
         for (Role role : user.getRoles() ){
-            this.authorities.add(new SimpleGrantedAuthority(role.getNome()));
+            this.grantedAuthorities.add(new SimpleGrantedAuthority(role.getNome()));
         }
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
+        return this.grantedAuthorities;
     }
 
     public Integer getId() {

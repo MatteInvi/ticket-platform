@@ -1,6 +1,5 @@
 package org.milestone.wdpt6.ticketplatform.ticket_platform.model;
 
-
 import java.util.List;
 import java.util.Set;
 
@@ -21,27 +20,23 @@ import jakarta.validation.constraints.NotNull;
 public class User {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull (message = "Il nome non può essere vuoto!")
+    @NotNull(message = "Il nome non può essere vuoto!")
     private String nome;
 
-    @NotNull (message = "Il nome dell'utente non può essere vuoto!")
+    @NotNull(message = "Il nome dell'utente non può essere vuoto!")
     private String email;
 
-    @NotNull (message =  "La password non può essere vuota")
+    @NotNull(message = "La password non può essere vuota")
     private String password;
 
-    
     private String statoPersonale;
-
-    @ManyToMany (fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "user_role",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id") 
-    )
+    
+    @NotNull
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")
@@ -49,7 +44,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Nota> note;
-
 
     public List<Nota> getNote() {
         return this.note;
@@ -59,8 +53,6 @@ public class User {
         this.note = note;
     }
 
-
-
     public List<Ticket> getTickets() {
         return this.tickets;
     }
@@ -69,7 +61,6 @@ public class User {
         this.tickets = tickets;
     }
 
-
     public String getStatoPersonale() {
         return this.statoPersonale;
     }
@@ -77,7 +68,6 @@ public class User {
     public void setStatoPersonale(String statoPersonale) {
         this.statoPersonale = statoPersonale;
     }
- 
 
     public String getNome() {
         return this.nome;
@@ -87,9 +77,6 @@ public class User {
         this.nome = nome;
     }
 
-
-
-
     public Set<Role> getRoles() {
         return this.roles;
     }
@@ -98,8 +85,6 @@ public class User {
         this.roles = roles;
     }
 
-
-
     public Integer getId() {
         return this.id;
     }
@@ -107,7 +92,6 @@ public class User {
     public void setId(Integer id) {
         this.id = id;
     }
-
 
     public String getEmail() {
         return this.email;
@@ -124,6 +108,5 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
 }

@@ -29,6 +29,7 @@
                     <th>Prodotto di riferimento</th>
                     <th>Data Creazione</th>
                     <th>Stato</th>
+                    <th sec:authorize="hasAuthority('ADMIN')">Operatore</th>
                     <th></th>
                 </tr>
             </thead>
@@ -39,6 +40,7 @@
                     <td>[[*{nomeProdotto}]]</td>
                     <td>[[*{dataCreazione}]]</td>
                     <td>[[*{stato}]]</td>
+                    <td sec:authorize="hasAuthority('ADMIN')">[[*{user.nome}]]</td>
                     <td>
                         <a th:href="@{tickets/{id}(id=*{id})}" class="btn btn-primary">Mostra</a>
                         <a sec:authorize="hasAuthority('ADMIN')" th:href="@{tickets/{id}/edit(id=*{id})}"

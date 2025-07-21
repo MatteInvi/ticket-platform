@@ -56,14 +56,16 @@ public class UserController {
 
             }
             if (nTicketNonCompleti == 0) {
-                // Cambia lo stato se non ha ticket aperti
+                // Cambia lo stato se non ha ticket aperti (setto il ruolo che non viene caricato dal form)
+                userForm.setRoles(user.get().getRoles());
                 userRepository.save(userForm);
                 return "redirect:/user/editStato";
             }
             // Non cambia lo stato se deve completare dei ticket
             return "redirect:/tickets";
         }
-        // Se non è attivo invece può modificare lo stato a prescindere
+        // Se non è attivo invece può modificare lo stato a prescindere (setto il ruolo che non viene caricato dal form)
+        userForm.setRoles(user.get().getRoles());
         userRepository.save(userForm);
         return "redirect:/user/editStato";
     }
