@@ -47,6 +47,19 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Ticket> tickets;
 
+    @OneToMany(mappedBy = "user")
+    private List<Nota> note;
+
+
+    public List<Nota> getNote() {
+        return this.note;
+    }
+
+    public void setNote(List<Nota> note) {
+        this.note = note;
+    }
+
+
 
     public List<Ticket> getTickets() {
         return this.tickets;

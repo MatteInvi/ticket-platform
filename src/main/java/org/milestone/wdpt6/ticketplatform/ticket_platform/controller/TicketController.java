@@ -15,7 +15,6 @@ import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.UserReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import jakarta.validation.Valid;
 
 @Controller
@@ -42,18 +40,18 @@ public class TicketController {
 
     @GetMapping
     public String index(Model model, Authentication authentication) {
-       Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
-       List<Ticket> ticketPerUtente = new ArrayList<>();
+        Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
+        List<Ticket> ticketsOperatore = new ArrayList<>();
         for (GrantedAuthority authority : authentication.getAuthorities()) {
             if (authority.getAuthority().equals("ADMIN")) {
                 model.addAttribute("tickets", ticketRepository.findAll());
-            } else if (authority.getAuthority().equals("OPERATORE")){
+            } else if (authority.getAuthority().equals("OPERATORE")) {
                 for (Ticket singleTicket : ticketRepository.findAll()) {
-                    if (singleTicket.getUser().equals(utenteLoggato.get())){
-                        ticketPerUtente.add(singleTicket);
-                    }                    
+                    if (singleTicket.getUser().equals(utenteLoggato.get())) {
+                        ticketsOperatore.add(singleTicket);
+                    }
                 }
-                model.addAttribute("tickets", ticketPerUtente);
+                model.addAttribute("tickets", ticketsOperatore);
             }
         }
 
@@ -61,10 +59,26 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
-    public String show(Model model, @PathVariable Integer id) {
-        model.addAttribute("ticket", ticketRepository.findById(id).get());
-        model.addAttribute("note", notaRepository.findAll());
-        return "tickets/show";
+    public String show(Model model, @PathVariable Integer id, Authentication authentication) {
+        Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
+        // Verifico il tipo di autorizzazzione...
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            // Se è un admin mostro tutti i ticket
+            if (authority.getAuthority().equals("ADMIN")) {
+                model.addAttribute("ticket", ticketRepository.findById(id).get());
+                model.addAttribute("note", notaRepository.findAll());
+                return "tickets/show";
+                // Se è un operatore mostro solo i ticket a lui assegnati
+            } else if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()
+                    && authority.getAuthority().equals("OPERATORE")) {
+                model.addAttribute("ticket", ticketRepository.findById(id).get());
+                model.addAttribute("note", notaRepository.findAll());
+                return "tickets/show";
+            }
+        }
+
+        return "HttpStatus.NOT_FOUND";
+
     }
 
     @GetMapping("/create")
@@ -141,10 +155,16 @@ public class TicketController {
     }
 
     @GetMapping("/{id}/editStato")
-    public String editStato(Model model, @PathVariable Integer id) {
-        model.addAttribute("ticket", ticketRepository.findById(id).get());
-        model.addAttribute("users", userRepository.findAll());
-        return "tickets/editStato";
+    public String editStato(Model model, @PathVariable Integer id, Authentication authentication) {
+        Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
+        if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()) {
+            model.addAttribute("ticket", ticketRepository.findById(id).get());
+            model.addAttribute("users", userRepository.findAll());
+            return "tickets/editStato";
+        }
+
+        return "HttpStatus.NOT_FOUND";
+
     }
 
     @PostMapping("/{id}/editStato")
@@ -165,13 +185,36 @@ public class TicketController {
         return "redirect:/tickets";
     }
 
+    // NOTE
     @GetMapping("/{id}/nota")
-    public String nota(@PathVariable Integer id, Model model) {
+    public String nota(@PathVariable Integer id, Model model, Authentication authentication) {
+        Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
         Nota nota = new Nota();
-        nota.setTicket(ticketRepository.findById(id).get());
-        model.addAttribute("ticket", ticketRepository.findById(id).get());
-        model.addAttribute("nota", nota);
-        return "note/create";
+        // Verifico il tipo di autorizzazzione...
+        for (GrantedAuthority authority : authentication.getAuthorities()) {
+            // Se è un admin creo la nota per qualsiasi ticket
+            if (authority.getAuthority().equals("ADMIN")) {
+                nota.setDataCreazione(LocalDateTime.now());
+                nota.setTicket(ticketRepository.findById(id).get());
+                nota.setUser(utenteLoggato.get());
+                model.addAttribute("ticket", ticketRepository.findById(id).get());
+                model.addAttribute("nota", nota);
+                return "note/create";
+                // Se è un operatore creo la nota solo se il ticket è assegnato a lui
+            } else if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()
+                    && authority.getAuthority().equals("OPERATORE")) {
+                nota.setDataCreazione(LocalDateTime.now());
+                nota.setTicket(ticketRepository.findById(id).get());
+                nota.setUser(utenteLoggato.get());
+                model.addAttribute("ticket", ticketRepository.findById(id).get());
+                model.addAttribute("nota", nota);
+                return "note/create";
+            }
+        }
+
+        return "HttpStatus.NOT_FOUND";
+
     }
+
 
 }

@@ -46,6 +46,7 @@
                         <h5 class="card-title">[[*{titolo}]]</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">[[*{dataCreazione}]]</h6>
                         <p class="card-text">[[*{testoNota}]]</p>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">Aggiunta da: [[*{user.nome}]]</h6>
                         <a th:href="@{|/note/*{id}/edit|}" class="btn btn-success">Modifica</a>
                         <button class="btn btn-warning" type="button" data-bs-toggle="modal"
                             th:data-bs-target="'#delete-modal-'+ *{id}">

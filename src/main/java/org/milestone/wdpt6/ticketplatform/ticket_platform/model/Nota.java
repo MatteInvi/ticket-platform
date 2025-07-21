@@ -9,9 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 @Table (name = "note")
@@ -29,12 +29,26 @@ public class Nota {
     private String testoNota;
 
     @NotNull (message = "La data di creazione non può essere vuota!")
-    @FutureOrPresent (message = "La data di creazione non può essere passata")
+    @PastOrPresent (message = "La data di creazione non può essere passata")
     private LocalDateTime dataCreazione;
 
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 
 
     public Ticket getTicket() {
