@@ -34,18 +34,20 @@ public class UserController {
         return "users/show";
     }
 
-    @GetMapping("/edit")
+    @GetMapping("/editStato")
     public String stato(Model model, Authentication authentication) {
         model.addAttribute("utente", userRepository.findByEmail(authentication.getName()).get());
 
-        return "users/edit";
+        return "users/editStato";
     }
 
-    @PostMapping("/edit")
-    public String update(@ModelAttribute("utente") User userForm, Authentication authentication) {
+    @PostMapping("/editStato")
+    public String updateStato(@ModelAttribute("utente") User userForm, Authentication authentication, Model model) {
         Optional<User> user = userRepository.findByEmail(authentication.getName());
         int nTicketNonCompleti = 0;
         if (user.get().getStatoPersonale().equals("Attivo")) {
+            // Se lo stato personale è attivo esegui il controllo 
+            // per vedere se deve completare dei ticket altrimenti non può modificarlo
             for (Ticket singleTicket : ticketRepository.findAll()) {
                 if (singleTicket.getUser().equals(user.get()) && !singleTicket.getStato().equals("Completato")) {
                     nTicketNonCompleti = +1;
@@ -54,15 +56,16 @@ public class UserController {
 
             }
             if (nTicketNonCompleti == 0) {
+                // Cambia lo stato se non ha ticket aperti
                 userRepository.save(userForm);
-                return "redirect:/user/edit";
+                return "redirect:/user/editStato";
             }
-
-            return "pages/home";
+            // Non cambia lo stato se deve completare dei ticket
+            return "redirect:/tickets";
         }
-
+        // Se non è attivo invece può modificare lo stato a prescindere
         userRepository.save(userForm);
-        return "redirect:/user/edit";
+        return "redirect:/user/editStato";
     }
 
 }

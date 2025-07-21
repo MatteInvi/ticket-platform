@@ -23,12 +23,14 @@
         <div sec:authorize="isAuthenticated()"  class="mx-2">
          <a th:href="@{/user/show}" class="btn btn-warning">Dettagli utente</a>
         </div>
+        <a sec:authorize="isAnonymous()" href="/login" class="btn btn-primary btn-lg">Login</a>
 
         <div sec:authorize="isAuthenticated()" class="user-details text-light-emphasis">
 
           Nome utente: <span sec:authentication="name" class="me-3"></span>
           Ruolo: <span sec:authentication="principal.authorities" class="me-3"></span>
 
+           
           <form class="d-inline" th:action="@{/logout}" method="POST">
             <button type="submit" class="btn btn-primary">Logout</button>
           </form>

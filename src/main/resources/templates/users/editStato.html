@@ -8,7 +8,7 @@
     <main class="container">
         <h1 class="text-center">Aggiorna il tuo stato [[${utente.nome}]]</h1>
         <h3 class="text-center">Stato attuale: [[${utente.statoPersonale}]]</h3>
-        <form class="text-center" th:action="@{/user/edit}" method="POST" th:object="${utente}">
+        <form class="text-center" th:action="@{/user/editStato}" method="POST" th:object="${utente}">
             <input type="hidden" th:field="*{nome}">
             <input type="hidden" th:field="*{email}">
             <input type="hidden" th:field="*{password}">

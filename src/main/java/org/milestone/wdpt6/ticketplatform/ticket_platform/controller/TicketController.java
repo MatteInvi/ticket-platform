@@ -42,6 +42,7 @@ public class TicketController {
     public String index(Model model, Authentication authentication) {
         Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
         List<Ticket> ticketsOperatore = new ArrayList<>();
+        // Controllo authority per mostrare i ticket giusti
         for (GrantedAuthority authority : authentication.getAuthorities()) {
             if (authority.getAuthority().equals("ADMIN")) {
                 model.addAttribute("tickets", ticketRepository.findAll());
@@ -132,7 +133,7 @@ public class TicketController {
             }
             // Verifico se l'utente è attivo
             // In caso di esito positivo per entrambe lo aggiungo alla lista da mostrare
-            // nella creazione ticket
+            // nella modifica ticket
             if (singelUser.getStatoPersonale().equals("Attivo") && isOperatore) {
                 utentiAttivi.add(singelUser);
             }
