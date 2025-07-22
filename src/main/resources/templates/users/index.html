@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/head :: head('Home')}">
+
+<body class="bg-secondary-subtle">
+    <nav th:insert="~{fragments/navbar ::navbar}"></nav>
+
+    <main class="container">
+        <h1 class="text-center">Indice Operatori</h1>
+        <section sec:authorize="hasAuthority('ADMIN')" class="search-bar row justify-content-center mb-3">
+            <form th:action="@{/tickets}" method="GET" class="col-12 d-flex justify-content-between">
+                <div class="creation-button">
+                    <a th:href="@{tickets/create}" class="btn btn-primary">Crea Ticket</a>
+                </div>
+                <div class="input-group w-25">
+                    <input type="search" name="keyword" class="form-control" id="cerca-ticket"
+                        placeholder="Cerca tra i ticket">
+                    <button type="submit" class="btn btn-success">Cerca</button>
+                </div>
+            </form>
+        </section>
+
+        <table class="table table-info table-striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Stato</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="utente : ${utenti}" th:object="${utente}">
+                    <td>[[*{id}]]</td>
+                    <td>[[*{nome}]]</td>
+                    <td>[[*{email}]]</td>
+                    <td>[[*{statoPersonale}]]</td>
+
+                </tr>
+            </tbody>
+
+        </table>
+
+
+    </main>
+
+    <th:block th:insert="~{fragments/footer :: script}"></th:block>
+</body>
+
+</html>

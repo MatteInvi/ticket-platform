@@ -15,6 +15,7 @@
                     <th>id</th>
                     <th>Titolo ticket</th>
                     <th>Prodotto di riferimento</th>
+                    <th>Categoria</th>
                     <th>Data Creazione</th>
                     <th>Stato</th>
                     <th>Operatore</th>
@@ -26,12 +27,13 @@
                     <td>[[*{id}]]</td>
                     <td>[[*{titolo}]]</td>
                     <td>[[*{nomeProdotto}]]</td>
+                    <td>[[*{category.nome}]]</td>
                     <td>[[*{dataCreazione}]]</td>
                     <td>[[*{stato}]]</td>
                     <td>[[*{user.nome}]]</td>
                     <td>
                         <a th:href="@{|/tickets/*{id}/nota|}" class="btn btn-primary">Aggiungi nota</a>
-                        <a th:href="@{|/tickets/*{id}/editStato|}" class="btn btn-warning">Aggiorna stato</a>
+                        <a sec:authorize="hasAuthority('OPERATORE')" th:href="@{|/tickets/*{id}/editStato|}" class="btn btn-warning">Aggiorna stato</a>
                     </td>
                 </tr>
             </tbody>

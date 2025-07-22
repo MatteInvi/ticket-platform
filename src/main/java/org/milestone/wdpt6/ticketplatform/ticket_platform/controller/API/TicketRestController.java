@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
+import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.CategoryRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,9 @@ public class TicketRestController {
     @Autowired
     TicketRepository ticketRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @GetMapping
     public ResponseEntity<List<Ticket>> index() {
 
@@ -32,12 +36,28 @@ public class TicketRestController {
 
     }
 
-    @GetMapping("/{stato}")
+    @GetMapping("stato/{stato}")
     public ResponseEntity<List<Ticket>> filtroStato(@PathVariable String stato) {
         List<Ticket> ticketFiltrati = new ArrayList<>();
         for (Ticket singleTicket : ticketRepository.findAll()) {
             if (singleTicket.getStato().equals(stato)) {
                 ticketFiltrati.add(singleTicket);
+            }
+
+        }
+        if (ticketFiltrati.size() == 0) {
+            return new ResponseEntity<>(ticketFiltrati, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(ticketFiltrati, HttpStatus.OK);
+    }
+
+    @GetMapping("categoria/{categoria}")
+    public ResponseEntity<List<Ticket>> filtroCategoria(@PathVariable String categoria) {
+        List<Ticket> ticketFiltrati = new ArrayList<>();
+        for (Ticket singleTicket : ticketRepository.findAll()) {
+            if (singleTicket.getCategory().getNome().equals(categoria)) {
+                ticketFiltrati.add(singleTicket);
+
             }
 
         }

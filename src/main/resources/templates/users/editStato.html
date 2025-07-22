@@ -7,11 +7,10 @@
     <nav th:insert="~{fragments/navbar ::navbar}"></nav>
     <main class="container">
         <h1 class="text-center">Aggiorna il tuo stato [[${utente.nome}]]</h1>
-        <h3 class="text-center">Stato attuale: [[${utente.statoPersonale}]]</h3>
+        <p class="text-center text-danger" th:text="${err}"></p>
         <form class="text-center" th:action="@{/user/editStato}" method="POST" th:object="${utente}">
             <input type="hidden" th:field="*{nome}">
             <input type="hidden" th:field="*{email}">
-            <input type="hidden" th:field="*{password}">
             <input type="hidden" th:field="*{id}">
             <label for="stato_personale" class="form-label">Seleziona il tuo stato attuale: </label>
             <select th:field="*{statoPersonale}" id="stato_personale">

@@ -22,6 +22,8 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/tickets/*/edit", "/tickets/*/delete").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/tickets/*/editStato").hasAnyAuthority("ADMIN", "OPERATORE")
                 .requestMatchers("/tickets", "/tickets/*").hasAnyAuthority("OPERATORE", "ADMIN")
+                .requestMatchers("/user/editStato", "/user/show").hasAuthority("OPERATORE")
+                .requestMatchers("/user").hasAuthority("ADMIN")
                 .requestMatchers("/**").permitAll())
                 .formLogin(Customizer.withDefaults())
                 .cors(cors -> cors.disable())

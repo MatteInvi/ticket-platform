@@ -15,9 +15,9 @@
                     <th>id</th>
                     <th>Nome</th>
                     <th>Email</th>
-                    <th>Stato personale</th>
-                    <th></th>
-                    
+                    <th sec:authorize="hasAuthority('OPERATORE')">Stato personale</th>
+                    <th sec:authorize="hasAuthority('OPERATORE')"></th>
+
                 </tr>
             </thead>
             <tbody>
@@ -25,9 +25,9 @@
                     <td>[[*{id}]]</td>
                     <td>[[*{nome}]]</td>
                     <td>[[*{email}]]</td>
-                    <td>[[*{statoPersonale}]]</td>
-                    <td>
-                        <a th:href="@{/user/editStato}"  class="btn btn-warning">Modifica stato</a>
+                    <td sec:authorize="hasAuthority('OPERATORE')">[[*{statoPersonale}]]</td>
+                    <td sec:authorize="hasAuthority('OPERATORE')">
+                        <a th:href="@{/user/editStato}" class="btn btn-warning">Modifica stato</a>
                     </td>
                 </tr>
             </tbody>

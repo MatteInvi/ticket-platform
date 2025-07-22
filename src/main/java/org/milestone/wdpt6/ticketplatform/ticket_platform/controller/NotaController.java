@@ -36,12 +36,14 @@ public class NotaController {
 
     @PostMapping
     public String store(@Valid @ModelAttribute("nota") Nota formNota, BindingResult bindingResult, Model model) {
+        Integer idTicket = formNota.getTicket().getId();
         if (bindingResult.hasErrors()) {
             model.addAttribute("nota", formNota);
             return "note/create";
         }
+        
         notaRepository.save(formNota);
-        return "redirect:/tickets";
+        return "redirect:/tickets/" + idTicket;
     }
 
     @GetMapping("/{id}/edit")
@@ -55,8 +57,7 @@ public class NotaController {
                 model.addAttribute("nota", notaRepository.findById(id).get());
                 return "note/edit";
                 // Se è un operatore modifico una nota solo se è di un suo ticket
-            } else if (ticketRepository.findById(idTicket).get().getUser() == utenteLoggato.get()
-                    && authority.getAuthority().equals("OPERATORE")) {
+            } else if (ticketRepository.findById(idTicket).get().getUser() == utenteLoggato.get()) {
                 model.addAttribute("nota", notaRepository.findById(id).get());
                 return "note/edit";
             }
@@ -69,14 +70,14 @@ public class NotaController {
     @PostMapping("/{id}")
     public String update(@PathVariable Integer id, @Valid @ModelAttribute("nota") Nota formNota,
             BindingResult bindingResult, Model model) {
-
+        Integer idTicket = formNota.getTicket().getId();        
         if (bindingResult.hasErrors()) {
             model.addAttribute("nota", formNota);
             return "nota/edit";
         }
-
+        
         notaRepository.save(formNota);
-        return "redirect:/tickets";
+        return "redirect:/tickets/" + idTicket;
     }
 
     @PostMapping("/{id}/delete")
@@ -88,12 +89,12 @@ public class NotaController {
             // Se è un admin elimino una nota a prescindere
             if (authority.getAuthority().equals("ADMIN")) {
                 notaRepository.deleteById(id);
-                return "redirect:/tickets";
+                return "redirect:/tickets/" + idTicket;
                 // Se è un operatore elimino una nota solo se è di un suo ticket
             } else if (ticketRepository.findById(idTicket).get().getUser() == utenteLoggato.get()
                     && authority.getAuthority().equals("OPERATORE")) {
                 notaRepository.deleteById(id);
-                return "redirect:/tickets";
+                return "redirect:/tickets/" + idTicket;
             }
         }
 

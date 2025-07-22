@@ -37,11 +37,24 @@
             <div class="mb-3">
                 <label for="data_creazione">Data creazione</label>
                 <input type="datetime-local" id="data_creazione" class="form-control" th:field="*{dataCreazione}"
-                    th:errorClass="is-invalid" >
+                    th:errorClass="is-invalid">
 
                 <div th:if="${#fields.hasErrors('dataCreazione')}" class="invalid-feedback">
                     <ul>
                         <li th:each="error : ${#fields.errors('dataCreazione')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="cateogria">Categoria</label>
+                <select id="categoria" class="form-select" th:field="*{category.id}" th:errorClass="is-invalid">
+                    <option th:each="category : ${categories}" th:value="${category.id}">[[${category.nome}]]</option>
+                </select>
+
+                <div th:if="${#fields.hasErrors('category.id')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('category.id')}" th:text="${error}"></li>
                     </ul>
                 </div>
             </div>

@@ -48,6 +48,24 @@ public class Ticket {
     @NotNull(message = "Inserisci un operatore")
     private User user;
 
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    @NotNull (message = "Inserisci una categoria!")
+    private Category category;
+
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+
+
+
 
     public User getUser() {
         return this.user;

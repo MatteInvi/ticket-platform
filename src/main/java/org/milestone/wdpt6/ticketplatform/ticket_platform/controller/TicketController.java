@@ -9,6 +9,7 @@ import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Nota;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Role;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.User;
+import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.CategoryRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.NotaRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.TicketRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.UserRepository;
@@ -40,15 +41,18 @@ public class TicketController {
     @Autowired
     NotaRepository notaRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @GetMapping
-    public String index(Model model, Authentication authentication,@RequestParam (required = false) String keyword) {
+    public String index(Model model, Authentication authentication, @RequestParam(required = false) String keyword) {
         Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
-        List<Ticket> tickets= new ArrayList<>();
-        
+        List<Ticket> tickets = new ArrayList<>();
+
         // Controllo authority per mostrare i ticket giusti
         for (GrantedAuthority authority : authentication.getAuthorities()) {
             if (authority.getAuthority().equals("ADMIN")) {
-                if (keyword !=null && !keyword.isEmpty()){
+                if (keyword != null && !keyword.isEmpty()) {
                     tickets = ticketRepository.findByTitoloContainingIgnoreCase(keyword);
                 } else {
                     tickets = ticketRepository.findAll();
@@ -110,6 +114,7 @@ public class TicketController {
             }
         }
         ticket.setDataCreazione(LocalDateTime.now());
+        model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("ticket", ticket);
         model.addAttribute("users", utentiAttivi);
         return "tickets/create";
@@ -119,6 +124,7 @@ public class TicketController {
     @PostMapping
     public String store(@Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("users", userRepository.findAll());
             return "tickets/create";
         }
@@ -145,6 +151,7 @@ public class TicketController {
                 utentiAttivi.add(singelUser);
             }
         }
+        model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("ticket", ticketRepository.findById(id).get());
         model.addAttribute("users", utentiAttivi);
         return "tickets/edit";
@@ -154,6 +161,7 @@ public class TicketController {
     public String update(@PathVariable Integer id, @Valid @ModelAttribute("ticket") Ticket formTicket,
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("users", userRepository.findAll());
             return "tickets/edit";
         }
@@ -166,6 +174,7 @@ public class TicketController {
     public String editStato(Model model, @PathVariable Integer id, Authentication authentication) {
         Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
         if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()) {
+            model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("ticket", ticketRepository.findById(id).get());
             model.addAttribute("users", userRepository.findAll());
             return "tickets/editStato";
@@ -179,6 +188,7 @@ public class TicketController {
     public String updateStato(@PathVariable Integer id, @Valid @ModelAttribute("ticket") Ticket formTicket,
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("users", userRepository.findAll());
             return "tickets/edit";
         }
@@ -223,6 +233,5 @@ public class TicketController {
         return "HttpStatus.NOT_FOUND";
 
     }
-
 
 }

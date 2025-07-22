@@ -4,10 +4,10 @@
 <head th:replace="~{fragments/head :: head('Crea ticket')}">
 
 <body>
-         
-        <nav th:insert="~{fragments/navbar :: navbar}"></nav>
+
+    <nav th:insert="~{fragments/navbar :: navbar}"></nav>
     <main class="container">
-   
+
         <h1>Crea un nuovo ticket</h1>
         <form th:action="@{/tickets}" method="POST" th:object="${ticket}">
             <div class="mb-3">
@@ -36,8 +36,8 @@
 
             <div class="mb-3">
                 <label for="data_creazione">Data creazione</label>
-                <input type="datetime-local" id="data_creazione" class="form-control" th:value="*{dataCreazione}" th:field="*{dataCreazione}"
-                    th:errorClass="is-invalid">
+                <input type="datetime-local" id="data_creazione" class="form-control" th:value="*{dataCreazione}"
+                    th:field="*{dataCreazione}" th:errorClass="is-invalid">
 
                 <div th:if="${#fields.hasErrors('dataCreazione')}" class="invalid-feedback">
                     <ul>
@@ -45,6 +45,21 @@
                     </ul>
                 </div>
             </div>
+
+            <div class="mb-3">
+                <label for="cateogria">Categoria</label>
+                <select  id="categoria" class="form-select" th:field="*{category.id}" th:errorClass="is-invalid">
+                    <option th:each="category : ${categories}" th:value="${category.id}">[[${category.nome}]]</option>
+                </select>
+
+                <div th:if="${#fields.hasErrors('category.id')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('category.id')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+
+
 
             <div class="mb-3">
                 <label for="operatore">Operatore</label>
@@ -61,8 +76,7 @@
 
             <div class="mb-3">
                 <label for="stato">Stato</label>
-                <select type="text" id="stato" class="form-select" th:field="*{stato}"
-                    th:errorClass="is-invalid">
+                <select type="text" id="stato" class="form-select" th:field="*{stato}" th:errorClass="is-invalid">
                     <option value="Da fare">Da fare</option>
                     <option value="In corso">In Corso</option>
                     <option value="Completato">Completato</option>
