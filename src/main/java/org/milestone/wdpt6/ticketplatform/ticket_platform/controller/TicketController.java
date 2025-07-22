@@ -14,6 +14,7 @@ import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.NotaReposit
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.TicketRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -55,7 +56,7 @@ public class TicketController {
                 if (keyword != null && !keyword.isEmpty()) {
                     tickets = ticketRepository.findByTitoloContainingIgnoreCase(keyword);
                 } else {
-                    tickets = ticketRepository.findAll();
+                    tickets = ticketRepository.findAll(Sort.by(Sort.Direction.ASC,"stato"));;
                 }
                 model.addAttribute("tickets", tickets);
             } else if (authority.getAuthority().equals("OPERATORE")) {

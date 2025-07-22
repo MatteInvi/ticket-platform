@@ -25,7 +25,11 @@ public class SecurityConfiguration {
                 .requestMatchers("/user/editStato", "/user/show").hasAuthority("OPERATORE")
                 .requestMatchers("/user").hasAuthority("ADMIN")
                 .requestMatchers("/**").permitAll())
-                .formLogin(Customizer.withDefaults())
+                .formLogin(form -> form.loginPage("/login").permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll())
                 .cors(cors -> cors.disable())
                 .csrf(csrf -> csrf.disable());
         return http.build();
