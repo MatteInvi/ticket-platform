@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/user")
@@ -29,15 +30,24 @@ public class UserController {
     TicketRepository ticketRepository;
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model, @RequestParam(required = false) String keyword) {
         List<User> operatori = new ArrayList<>();
-        for (User singleUser : userRepository.findAll()) {
+        List<User> utenti = new ArrayList<>();
+        // Prima salvo tutti gli utenti in una lista (filtrando se richiesto)
+        if (keyword != null && !keyword.isEmpty()) {
+            utenti = userRepository.findByNomeContainingIgnoreCase(keyword);
+        } else {
+            utenti = userRepository.findAll();
+        }
+        // Successivamente li filtro in modo che siano solo operatori
+        for (User singleUser : utenti) {
             for (Role singleRole : singleUser.getRoles()) {
                 if (singleRole.getNome().equals("OPERATORE")) {
                     operatori.add(singleUser);
-                } 
+                }
             }
         }
+
         model.addAttribute("utenti", operatori);
         return "users/index";
     }

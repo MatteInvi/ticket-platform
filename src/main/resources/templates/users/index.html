@@ -9,13 +9,10 @@
     <main class="container">
         <h1 class="text-center">Indice Operatori</h1>
         <section sec:authorize="hasAuthority('ADMIN')" class="search-bar row justify-content-center mb-3">
-            <form th:action="@{/tickets}" method="GET" class="col-12 d-flex justify-content-between">
-                <div class="creation-button">
-                    <a th:href="@{tickets/create}" class="btn btn-primary">Crea Ticket</a>
-                </div>
+            <form th:action="@{/user}" method="GET" class="col-12 d-flex justify-content-between">
                 <div class="input-group w-25">
                     <input type="search" name="keyword" class="form-control" id="cerca-ticket"
-                        placeholder="Cerca tra i ticket">
+                        placeholder="Cerca tra gli Operatori">
                     <button type="submit" class="btn btn-success">Cerca</button>
                 </div>
             </form>

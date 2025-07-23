@@ -46,7 +46,8 @@ public class TicketController {
     CategoryRepository categoryRepository;
 
     @GetMapping
-    public String index(Model model, Authentication authentication, @RequestParam(required = false) String keyword) {
+    public String index(Model model, Authentication authentication, @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String filtro) {
         Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
         List<Ticket> tickets = new ArrayList<>();
 
@@ -56,17 +57,22 @@ public class TicketController {
                 if (keyword != null && !keyword.isEmpty()) {
                     tickets = ticketRepository.findByTitoloContainingIgnoreCase(keyword);
                 } else {
-                    tickets = ticketRepository.findAll(Sort.by(Sort.Direction.ASC,"stato"));;
+                    tickets = ticketRepository.findAll(Sort.by(Sort.Direction.ASC, "stato"));
+                    ;
                 }
-                model.addAttribute("tickets", tickets);
+
             } else if (authority.getAuthority().equals("OPERATORE")) {
                 for (Ticket singleTicket : ticketRepository.findAll()) {
                     if (singleTicket.getUser().equals(utenteLoggato.get())) {
                         tickets.add(singleTicket);
                     }
                 }
-                model.addAttribute("tickets", tickets);
+
             }
+            if (filtro != null && !filtro.isEmpty()) {
+                tickets = ticketRepository.findByStato(filtro);
+            }
+            model.addAttribute("tickets", tickets);
         }
 
         return "tickets/index";

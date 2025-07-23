@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -22,7 +22,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/tickets/*/edit", "/tickets/*/delete").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/tickets/*/editStato").hasAnyAuthority("ADMIN", "OPERATORE")
                 .requestMatchers("/tickets", "/tickets/*").hasAnyAuthority("OPERATORE", "ADMIN")
-                .requestMatchers("/user/editStato", "/user/show").hasAuthority("OPERATORE")
+                .requestMatchers("/user/editStato").hasAuthority("OPERATORE")
                 .requestMatchers("/user").hasAuthority("ADMIN")
                 .requestMatchers("/**").permitAll())
                 .formLogin(form -> form.loginPage("/login").permitAll())

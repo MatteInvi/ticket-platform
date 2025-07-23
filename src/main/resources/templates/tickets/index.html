@@ -8,17 +8,35 @@
 
     <main class="container">
         <h1 class="text-center">Indice dei ticket</h1>
-        <section sec:authorize="hasAuthority('ADMIN')" class="search-bar row justify-content-center mb-3">
-            <form th:action="@{/tickets}" method="GET" class="col-12 d-flex justify-content-between">
-                <div class="creation-button" >
-                    <a th:href="@{tickets/create}" class="btn btn-primary">Crea Ticket</a>
-                </div>
-                <div class="input-group w-25">
+        <section class="search-bar d-flex justify-content-between mb-3">
+
+            <div sec:authorize="hasAuthority('ADMIN')" class="creation-button">
+                <a th:href="@{tickets/create}" class="btn btn-primary">Crea Ticket</a>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Filtra
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" th:href="@{|/tickets?filtro=Da Fare|}">Da fare</a></li>
+                    <li><a class="dropdown-item" th:href="@{/tickets?filtro=In Corso}">In Corso</a></li>
+                    <li><a class="dropdown-item" th:href="@{/tickets?filtro=Completato}">Completati</a></li>
+                </ul>
+            </div>
+
+            <div class="input-group w-25">
+
+                <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/tickets}" method="GET" class="col-12 d-flex">
+
                     <input type="search" name="keyword" class="form-control" id="cerca-ticket"
                         placeholder="Cerca tra i ticket">
                     <button type="submit" class="btn btn-success">Cerca</button>
-                </div>
-            </form>
+
+                </form>
+
+            </div>
         </section>
 
         <table class="table table-info table-striped">
