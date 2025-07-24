@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Nota;
-import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Role;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.User;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.CategoryRepository;
@@ -58,7 +57,6 @@ public class TicketController {
                     tickets = ticketRepository.findByTitoloContainingIgnoreCase(keyword);
                 } else {
                     tickets = ticketRepository.findAll(Sort.by(Sort.Direction.ASC, "stato"));
-                    ;
                 }
 
             } else if (authority.getAuthority().equals("OPERATORE")) {
@@ -104,22 +102,8 @@ public class TicketController {
     @GetMapping("/create")
     public String create(Model model) {
         Ticket ticket = new Ticket();
-        List<User> utentiAttivi = new ArrayList<>();
-        boolean isOperatore = false;
-        // Verifico se l'utente è un operatore
-        for (User singelUser : userRepository.findAll()) {
-            for (Role ruolo : singelUser.getRoles()) {
-                if (ruolo.getNome().equals("OPERATORE")) {
-                    isOperatore = true;
-                }
-            }
-            // Verifico se l'utente è attivo
-            // In caso di esito positivo per entrambe lo aggiungo alla lista da mostrare
-            // nella creazione ticket
-            if (singelUser.getStatoPersonale().equals("Disponibile") && isOperatore) {
-                utentiAttivi.add(singelUser);
-            }
-        }
+        List<User> utentiAttivi = userRepository.findUtentiDisponibiliOperatore();
+
         ticket.setDataCreazione(LocalDateTime.now());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("ticket", ticket);
@@ -141,23 +125,7 @@ public class TicketController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Integer id) {
-        List<User> utentiAttivi = new ArrayList<>();
-        boolean isOperatore = false;
-        // Verifico se l'utente è un operatore
-        for (User singelUser : userRepository.findAll()) {
-            for (Role ruolo : singelUser.getRoles()) {
-                if (ruolo.getNome().equals("OPERATORE")) {
-                    isOperatore = true;
-                    break;
-                }
-            }
-            // Verifico se l'utente è attivo
-            // In caso di esito positivo per entrambe lo aggiungo alla lista da mostrare
-            // nella modifica ticket
-            if (singelUser.getStatoPersonale().equals("Disponibile") && isOperatore) {
-                utentiAttivi.add(singelUser);
-            }
-        }
+        List<User> utentiAttivi = userRepository.findUtentiDisponibiliOperatore();
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("ticket", ticketRepository.findById(id).get());
         model.addAttribute("users", utentiAttivi);

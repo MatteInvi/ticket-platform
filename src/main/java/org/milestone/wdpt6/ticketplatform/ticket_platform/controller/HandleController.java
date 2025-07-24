@@ -24,7 +24,7 @@ public class HandleController implements ErrorController {
                 return "error/error-404";
             } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 return "error/error-500";
-            } else if (statusCode == HttpStatus.FORBIDDEN.value()){
+            } else if (statusCode == HttpStatus.FORBIDDEN.value()) {
                 return "error/error-403";
             }
         }

@@ -2,7 +2,6 @@ package org.milestone.wdpt6.ticketplatform.ticket_platform.model;
 
 import java.util.List;
 import java.util.Set;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +32,7 @@ public class User {
     private String password;
 
     private String statoPersonale;
-    
+
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -44,6 +43,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Nota> note;
+
 
     public List<Nota> getNote() {
         return this.note;

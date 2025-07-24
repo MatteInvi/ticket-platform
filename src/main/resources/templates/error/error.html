@@ -1,8 +1,21 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h1>QUalcosa è adata storta! </h1>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<a href="/">Go Home</a>
+<head th:replace="~{fragments/head :: head('Errore 404')}">
+
+<body class="bg-secondary-subtle">
+    <main class="container">
+        <div class="text-center">
+            <h1 class="">Errore generico</h1>
+            <a th:href="@{/}" class="btn btn-primary">Torna alla home</a>
+           
+        </div>
+
+
+    </main>
+
+
+    <th:block th:insert="~{fragments/footer :: script}"></th:block>
 </body>
+
 </html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/head :: head('Errore 404')}">
+
+<body class="bg-secondary-subtle">
+    <main class="container">
+        <div class="text-center">
+            <h1 class="">Errore 500!</h1>
+            <a th:href="@{/}" class="btn btn-primary">Torna alla home</a>
+           
+        </div>
+
+
+    </main>
+
+
+    <th:block th:insert="~{fragments/footer :: script}"></th:block>
+</body>
+
+</html>
