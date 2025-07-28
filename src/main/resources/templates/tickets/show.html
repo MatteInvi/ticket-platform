@@ -33,17 +33,18 @@
                     <td>[[*{user.nome}]]</td>
                     <td>
                         <a th:href="@{|/tickets/*{id}/nota|}" class="btn btn-primary">Aggiungi nota</a>
-                        <a sec:authorize="hasAuthority('OPERATORE')" th:href="@{|/tickets/*{id}/editStato|}" class="btn btn-warning">Aggiorna stato</a>
+                        <a sec:authorize="hasAuthority('OPERATORE')" th:href="@{|/tickets/*{id}/editStato|}"
+                            class="btn btn-warning">Aggiorna stato</a>
                     </td>
                 </tr>
             </tbody>
 
         </table>
-
+        <!-- Show note -->
         <h3>Note</h3>
         <div class="row">
             <div class="col-4 mb-3" th:object="${nota}" th:each="nota : ${ticket.note}">
-                <div class="card">
+                <div class="card mh-25">
                     <div class="card-body">
                         <h5 class="card-title">[[*{titolo}]]</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">[[*{dataCreazione}]]</h6>

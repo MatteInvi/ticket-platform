@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/head :: head('Create ticket')}">
+
+<body>
+
+    <nav th:insert="~{fragments/navbar :: navbar}"></nav>
+    <main class="container">
+
+        <h1>Modifica utente</h1>
+        <form th:action="@{|/user/${user.id}|}" method="POST" th:object="${user}">
+            <div class="mb-3">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" class="form-control" th:field="*{nome}" th:errorClass="is-invalid">
+
+                <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('nome')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="email">Email</label>
+                <input type="text" id="email" class="form-control" th:field="*{email}" th:errorClass="is-invalid">
+
+                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('email')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+                <div th:text="${errMail}" class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" th:field="*{password}" th:errorClass="is-invalid">
+
+                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('password')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+            
+
+            <div class="mb-3">
+                <button class="btn btn-primary" type="submit">Modifica</button>
+            </div>
+        </form>
+
+
+    </main>
+
+
+
+
+    <th:block th:insert="~{fragments/footer :: script}"></th:block>
+</body>
+
+</html>

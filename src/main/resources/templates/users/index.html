@@ -8,15 +8,21 @@
 
     <main class="container">
         <h1 class="text-center">Indice Operatori</h1>
-        <section sec:authorize="hasAuthority('ADMIN')" class="search-bar row justify-content-center mb-3">
-            <form th:action="@{/user}" method="GET" class="col-12 d-flex justify-content-between">
-                <div class="input-group w-25">
-                    <input type="search" name="keyword" class="form-control" id="cerca-ticket"
-                        placeholder="Cerca tra gli Operatori">
-                    <button type="submit" class="btn btn-success">Cerca</button>
-                </div>
-            </form>
-        </section>
+        <div class="d-flex justify-content-between mb-3">
+            <section sec:authorize="hasAuthority('ADMIN')">
+                <form th:action="@{/user}" method="GET" class="d-flex">
+                  
+                        <input type="search" name="keyword" class="form-control" id="cerca-ticket"
+                            placeholder="Cerca tra gli Operatori">
+                        <button type="submit" class="btn btn-success">Cerca</button>
+                    
+                </form>
+
+            </section>
+            <div class="">
+                <a th:href="@{/user/create}" class="btn btn-success">Crea nuovo utente</a>
+            </div>
+        </div>
 
         <table class="table table-info table-striped">
             <thead>
@@ -25,6 +31,7 @@
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Stato</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +40,9 @@
                     <td>[[*{nome}]]</td>
                     <td>[[*{email}]]</td>
                     <td>[[*{statoPersonale}]]</td>
+                    <td>
+                        <a th:href="@{|user/*{id}/edit|}" class="btn btn-primary">Modifica</a>
+                    </td>
 
                 </tr>
             </tbody>

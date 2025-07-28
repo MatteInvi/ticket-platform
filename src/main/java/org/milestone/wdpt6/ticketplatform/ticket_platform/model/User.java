@@ -2,6 +2,8 @@ package org.milestone.wdpt6.ticketplatform.ticket_platform.model;
 
 import java.util.List;
 import java.util.Set;
+
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,28 +14,30 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "Il nome non può essere vuoto!")
+    @NotBlank(message = "Il nome non può essere vuoto!")
     private String nome;
 
-    @NotNull(message = "Il nome dell'utente non può essere vuoto!")
+    @Email (message = "Inserisci una mail valida")
+    @NotBlank(message = "'La mail dell'utente non può essere vuota!")
     private String email;
 
-    @NotNull(message = "La password non può essere vuota")
+    @NotBlank(message = "La password non può essere vuota")
     private String password;
 
     private String statoPersonale;
 
-    @NotNull
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
@@ -43,7 +47,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Nota> note;
-
 
     public List<Nota> getNote() {
         return this.note;

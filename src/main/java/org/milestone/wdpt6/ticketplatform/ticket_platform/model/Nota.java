@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +26,7 @@ public class Nota {
     @NotBlank (message = "Il titolo non può essere vuoto!")
     private String titolo;
 
+    @Lob
     @NotBlank (message = "Il testo della nota non può essere vuoto!")
     private String testoNota;
 
