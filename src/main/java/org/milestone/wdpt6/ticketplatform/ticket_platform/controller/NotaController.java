@@ -41,7 +41,7 @@ public class NotaController {
             model.addAttribute("nota", formNota);
             return "note/create";
         }
-        
+
         notaRepository.save(formNota);
         return "redirect:/tickets/" + idTicket;
     }
@@ -70,12 +70,12 @@ public class NotaController {
     @PostMapping("/{id}")
     public String update(@PathVariable Integer id, @Valid @ModelAttribute("nota") Nota formNota,
             BindingResult bindingResult, Model model) {
-        Integer idTicket = formNota.getTicket().getId();        
+        Integer idTicket = formNota.getTicket().getId();
         if (bindingResult.hasErrors()) {
             model.addAttribute("nota", formNota);
             return "nota/edit";
         }
-        
+
         notaRepository.save(formNota);
         return "redirect:/tickets/" + idTicket;
     }

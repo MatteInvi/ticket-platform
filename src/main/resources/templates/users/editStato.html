@@ -12,12 +12,20 @@
             <input type="hidden" th:field="*{nome}">
             <input type="hidden" th:field="*{email}">
             <input type="hidden" th:field="*{id}">
-            <label for="stato_personale" class="form-label">Seleziona il tuo stato attuale: </label>
-            <select th:field="*{statoPersonale}" id="stato_personale">
-                <option value="Disponibile">Disponibile</option>
-                <option value="Non Disponibile">Non Disponibile</option>
-            </select>
+            <div class="mb-3">
+                <label for="stato_personale" class="form-label">Seleziona il tuo stato attuale: </label>
+                <select th:field="*{statoPersonale}" id="stato_personale" th:errorClass="is-invalid">
+                    <option value="Disponibile">Disponibile</option>
+                    <option value="Non Disponibile">Non Disponibile</option>
+                </select>
+
+                <div th:if="${#fields.hasErrors('statoPersonale')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('statoPersonale')}" th:text="${error}"></li>
+                    </ul>
+                </div>
             </div>
+
             <button type="submit" class="btn btn-warning">Aggiorna</button>
         </form>
 

@@ -13,7 +13,7 @@
             <input type="hidden" th:field="*{id}">
             <div class="mb-3">
                 <label for="titolo">Titolo</label>
-                <input type="text" id="titolo" class="form-control" th:field="*{titolo}" th:errorClass="is-invalid">
+                <input type="text" id="titolo" class="form-control" th:field="*{titolo}" th:errorClass="is-invalid" required>
 
                 <div th:if="${#fields.hasErrors('titolo')}" class="invalid-feedback">
                     <ul>
@@ -25,7 +25,7 @@
 
             <div class="mb-3">
                 <label for="testo_nota">Testo nota:</label>
-                <textarea id="test_nota" class="form-control" th:field="*{testoNota}" th:errorClass="is-invalid">
+                <textarea id="test_nota" class="form-control" th:field="*{testoNota}" th:errorClass="is-invalid" required>
                 </textarea>
 
                 <div th:if="${#fields.hasErrors('testoNota')}" class="invalid-feedback">
@@ -38,7 +38,7 @@
             <div class="mb-3">
                 <label for="data_creazione">Data creazione</label>
                 <input type="datetime-local" id="data_creazione" class="form-control" th:field="*{dataCreazione}"
-                    th:errorClass="is-invalid">
+                    th:errorClass="is-invalid" required>
 
                 <div th:if="${#fields.hasErrors('dataCreazione')}" class="invalid-feedback">
                     <ul>

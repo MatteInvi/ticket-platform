@@ -18,4 +18,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
      @Query("SELECT utenti FROM User utenti JOIN utenti.roles ruoli WHERE ruoli.nome = 'OPERATORE' AND utenti.statoPersonale = 'DISPONIBILE'")
      List<User> findUtentiDisponibiliOperatore();
 
+      @Query("SELECT utenti FROM User utenti JOIN utenti.roles ruoli WHERE ruoli.nome = 'OPERATORE'")
+     List<User> findUtentiOperatori();
+
 }

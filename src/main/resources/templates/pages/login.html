@@ -12,11 +12,11 @@
                 <h2 class="text-center">Accedi</h2>
                 <div class="col">
                     <label class="form-label" for="username">Username:</label>
-                    <input type="text" name="username" id="username" class="form-control">
+                    <input type="text" name="username" id="username" class="form-control" required>
                 </div>
                 <div class="col">
                     <label class="form-label" for="password">Password:</label>
-                    <input type="password" name="password" id="password" class="form-control">
+                    <input type="password" name="password" id="password" class="form-control" required>
                 </div>
                 <div th:if="${param.error}" class="text-danger mt-1">Credenziali non valide!</div>
                 <div th:if="${param.logout}" class="text-success mt-1">Logout effettuato con successo!</div>

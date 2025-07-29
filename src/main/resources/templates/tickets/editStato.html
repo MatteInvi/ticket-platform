@@ -16,7 +16,7 @@
                     <div class="mb-3">
                         <label for="stato">Stato</label>
                         <select type="text" id="stato" class="form-select" th:field="*{stato}"
-                            th:errorClass="is-invalid">
+                            th:errorClass="is-invalid" required>
                             <option value="Da Fare">Da fare</option>
                             <option value="In Corso">In Corso</option>
                             <option value="Completato">Completato</option>

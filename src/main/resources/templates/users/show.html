@@ -16,7 +16,8 @@
                     <th>Nome</th>
                     <th>Email</th>
                     <th sec:authorize="hasAuthority('OPERATORE')">Stato personale</th>
-                    <th sec:authorize="hasAuthority('OPERATORE')"></th>
+                    <th></th>
+                    
 
                 </tr>
             </thead>
@@ -28,6 +29,9 @@
                     <td sec:authorize="hasAuthority('OPERATORE')">[[*{statoPersonale}]]</td>
                     <td sec:authorize="hasAuthority('OPERATORE')">
                         <a th:href="@{/user/editStato}" class="btn btn-warning">Modifica stato</a>
+                    </td>
+                    <td sec:authorize="hasAuthority('ADMIN')">
+                        <a th:href="@{/user/{id}/edit(id=*{id})}" class="btn bg-secondary">Modifica</a>
                     </td>
                 </tr>
             </tbody>

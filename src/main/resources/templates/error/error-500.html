@@ -5,8 +5,9 @@
 
 <body class="bg-secondary-subtle">
     <main class="container">
-        <div class="text-center">
+        <div class="text-center mt-5">
             <h1 class="">Errore 500!</h1>
+            <p th:text="${message}"></p>
             <a th:href="@{/}" class="btn btn-primary">Torna alla home</a>
            
         </div>

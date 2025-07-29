@@ -11,11 +11,11 @@
         <div class="d-flex justify-content-between mb-3">
             <section sec:authorize="hasAuthority('ADMIN')">
                 <form th:action="@{/user}" method="GET" class="d-flex">
-                  
-                        <input type="search" name="keyword" class="form-control" id="cerca-ticket"
-                            placeholder="Cerca tra gli Operatori">
-                        <button type="submit" class="btn btn-success">Cerca</button>
-                    
+
+                    <input type="search" name="keyword" class="form-control" id="cerca-ticket"
+                        placeholder="Cerca tra gli Operatori">
+                    <button type="submit" class="btn btn-success">Cerca</button>
+
                 </form>
 
             </section>
@@ -40,8 +40,41 @@
                     <td>[[*{nome}]]</td>
                     <td>[[*{email}]]</td>
                     <td>[[*{statoPersonale}]]</td>
-                    <td>
+                    <td class="text-center">
                         <a th:href="@{|user/*{id}/edit|}" class="btn btn-primary">Modifica</a>
+                        <button sec:authorize="hasAuthority('ADMIN')" class="btn btn-secondary" type="button"
+                            data-bs-toggle="modal" th:data-bs-target="'#delete-modal-'+ *{id}">
+                            Elimina
+                        </button>
+
+                        <!-- Modale eliminazione ticket -->
+                        <div class="modal fade" th:id="'delete-modal-' + *{id}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminare l'utente:
+                                            <strong>"[[*{nome}]]"</strong>
+
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            Sei sicuro di voler eliminare l'utente
+                                            <strong>"[[*{nome}]]"</strong> con id: <strong>"[[*{id}]]"</strong>?
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Chiudi</button>
+                                        <form th:action="@{|/user/*{id}/delete|}" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-danger btn">Elimina</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </td>
 
                 </tr>

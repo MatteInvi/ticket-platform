@@ -58,18 +58,21 @@ public class TicketController {
                 } else {
                     tickets = ticketRepository.findAll(Sort.by(Sort.Direction.ASC, "stato"));
                 }
+                if (filtro != null && !filtro.isEmpty()) {
+                    tickets = ticketRepository.findByStato(filtro);
+                }
 
             } else if (authority.getAuthority().equals("OPERATORE")) {
-                for (Ticket singleTicket : ticketRepository.findAll()) {
-                    if (singleTicket.getUser().equals(utenteLoggato.get())) {
-                        tickets.add(singleTicket);
-                    }
+                List<Ticket> ticketsUser = ticketRepository.findByUser(utenteLoggato.get());
+                for (Ticket singleTicket : ticketsUser) {
+                    tickets.add(singleTicket);
+                }
+                if (filtro != null && !filtro.isEmpty()) {
+                    tickets = ticketRepository.findByUserAndStato(utenteLoggato.get(), filtro);
                 }
 
             }
-            if (filtro != null && !filtro.isEmpty()) {
-                tickets = ticketRepository.findByStato(filtro);
-            }
+
             model.addAttribute("tickets", tickets);
         }
 
@@ -87,8 +90,7 @@ public class TicketController {
                 model.addAttribute("note", notaRepository.findAll());
                 return "tickets/show";
                 // Se è un operatore mostro solo i ticket a lui assegnati
-            } else if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()
-                    && authority.getAuthority().equals("OPERATORE")) {
+            } else if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()) {
                 model.addAttribute("ticket", ticketRepository.findById(id).get());
                 model.addAttribute("note", notaRepository.findAll());
                 return "tickets/show";
@@ -126,8 +128,9 @@ public class TicketController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Integer id) {
         List<User> utentiAttivi = userRepository.findUtentiDisponibiliOperatore();
+        Optional<Ticket> tickeOptional = ticketRepository.findById(id);
         model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("ticket", ticketRepository.findById(id).get());
+        model.addAttribute("ticket", tickeOptional.get());
         model.addAttribute("users", utentiAttivi);
         return "tickets/edit";
     }
@@ -148,9 +151,11 @@ public class TicketController {
     @GetMapping("/{id}/editStato")
     public String editStato(Model model, @PathVariable Integer id, Authentication authentication) {
         Optional<User> utenteLoggato = userRepository.findByEmail(authentication.getName());
-        if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()) {
+        Optional<Ticket> tickeOptional = ticketRepository.findById(id);
+
+        if (tickeOptional.get().getUser() == utenteLoggato.get()) {
             model.addAttribute("categories", categoryRepository.findAll());
-            model.addAttribute("ticket", ticketRepository.findById(id).get());
+            model.addAttribute("ticket", tickeOptional.get());
             model.addAttribute("users", userRepository.findAll());
             return "tickets/editStato";
         }
@@ -174,6 +179,10 @@ public class TicketController {
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Integer id) {
+        for (Nota singleNota : ticketRepository.findById(id).get().getNote()) {
+            notaRepository.delete(singleNota);
+        }
+
         ticketRepository.deleteById(id);
         return "redirect:/tickets";
     }

@@ -12,7 +12,7 @@
         <form th:action="@{/tickets}" method="POST" th:object="${ticket}">
             <div class="mb-3">
                 <label for="titolo">Titolo</label>
-                <input type="text" id="titolo" class="form-control" th:field="*{titolo}" th:errorClass="is-invalid">
+                <input type="text" id="titolo" class="form-control" th:field="*{titolo}" th:errorClass="is-invalid" required>
 
                 <div th:if="${#fields.hasErrors('titolo')}" class="invalid-feedback">
                     <ul>
@@ -25,7 +25,7 @@
             <div class="mb-3">
                 <label for="nome_prodotto">Nome Prodotto</label>
                 <input type="text" id="nome_prodotto" class="form-control" th:field="*{nomeProdotto}"
-                    th:errorClass="is-invalid">
+                    th:errorClass="is-invalid" required>
 
                 <div th:if="${#fields.hasErrors('nomeProdotto')}" class="invalid-feedback">
                     <ul>
@@ -37,7 +37,7 @@
             <div class="mb-3">
                 <label for="data_creazione">Data creazione</label>
                 <input type="datetime-local" id="data_creazione" class="form-control" th:value="*{dataCreazione}"
-                    th:field="*{dataCreazione}" th:errorClass="is-invalid">
+                    th:field="*{dataCreazione}" th:errorClass="is-invalid" required>
 
                 <div th:if="${#fields.hasErrors('dataCreazione')}" class="invalid-feedback">
                     <ul>
@@ -48,7 +48,7 @@
 
             <div class="mb-3">
                 <label for="cateogria">Categoria</label>
-                <select  id="categoria" class="form-select" th:field="*{category.id}" th:errorClass="is-invalid">
+                <select  id="categoria" class="form-select" th:field="*{category.id}" th:errorClass="is-invalid" required>
                     <option th:each="category : ${categories}" th:value="${category.id}">[[${category.nome}]]</option>
                 </select>
 
@@ -63,7 +63,7 @@
 
             <div class="mb-3">
                 <label for="operatore">Operatore</label>
-                <select id="operatore" class="form-select" th:field="*{user.id}" th:errorClass="is-invalid">
+                <select id="operatore" class="form-select" th:field="*{user.id}" th:errorClass="is-invalid" required>
                     <option th:each="user : ${users}" th:value="${user.id}">[[${user.nome}]]</option>
                 </select>
 
@@ -76,7 +76,7 @@
 
             <div class="mb-3">
                 <label for="stato">Stato</label>
-                <select type="text" id="stato" class="form-select" th:field="*{stato}" th:errorClass="is-invalid">
+                <select type="text" id="stato" class="form-select" th:field="*{stato}" th:errorClass="is-invalid" required>
                     <option value="Da fare">Da fare</option>
                     <option value="In corso">In Corso</option>
                     <option value="Completato">Completato</option>
