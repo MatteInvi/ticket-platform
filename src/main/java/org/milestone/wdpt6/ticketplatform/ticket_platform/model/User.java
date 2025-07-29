@@ -36,7 +36,6 @@ public class User {
     @NotBlank(message = "La password non può essere vuota")
     private String password;
 
-    @NotBlank(message = "Devi impostare uno stato personale")
     private String statoPersonale;
 
     @ManyToMany(fetch = FetchType.EAGER)

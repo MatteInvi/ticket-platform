@@ -69,14 +69,15 @@ public class UserController {
     @GetMapping("/create")
     public String create(Model model) {
         User nuovoUtente = new User();
-
         model.addAttribute("user", nuovoUtente);
         return "users/create";
     }
 
-    @PostMapping("/create")
-    public String store(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult, Model model) {
+    @PostMapping
+    public String store(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult,
+            Authentication authentication, Model model) {
         // Cerco il ruolo con id 2 (Operatore)
+        Optional<User> utenteloggato = userRepository.findByEmail(authentication.getName());
         Role roleOperatore = roleRepository.findById(2).get();
         userForm.setStatoPersonale("Non disponibile");
 
@@ -84,9 +85,10 @@ public class UserController {
             return "users/create";
         }
         if (userRepository.existsByEmail(userForm.getEmail())) {
-            bindingResult.rejectValue("email", "error.user", "Email già registrata");
+            bindingResult.rejectValue("email", "error.user", "Email già registrata da un altro utente");
             return "users/create";
         }
+
         // Salvo l'id del ruolo nel setRoles
         // Inserisco il password encoder e salvo
         userForm.setRoles((Set.of(roleOperatore)));
@@ -116,9 +118,6 @@ public class UserController {
         if (userRepository.existsByEmailAndIdNot(userForm.getEmail(), userForm.getId())) {
             bindingResult.rejectValue("email", "error.user", "Email già registrata da un altro utente");
             return "users/edit";
-        }
-        if (userForm.getPassword() != null && !userForm.getPassword().isBlank()) {
-            userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         }
         // Salvo l'id del ruolo nel setRoles
         // Inserisco il password encoder e salvo
@@ -184,7 +183,7 @@ public class UserController {
         }
         ticketRepository.deleteAll(userTickets);
 
-        // userRepository.deleteById(id);
+        userRepository.deleteById(id);
         return "redirect:/user";
     }
 
