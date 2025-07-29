@@ -77,7 +77,6 @@ public class UserController {
     public String store(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult,
             Authentication authentication, Model model) {
         // Cerco il ruolo con id 2 (Operatore)
-        Optional<User> utenteloggato = userRepository.findByEmail(authentication.getName());
         Role roleOperatore = roleRepository.findById(2).get();
         userForm.setStatoPersonale("Non disponibile");
 
@@ -123,7 +122,7 @@ public class UserController {
         // Inserisco il password encoder e salvo
         userForm.setStatoPersonale("Non disponibile");
         userForm.setRoles((Set.of(roleOperatore)));
-
+        userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(userForm);
         return "redirect:/user";
     }

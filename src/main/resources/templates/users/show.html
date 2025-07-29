@@ -31,7 +31,7 @@
                         <a th:href="@{/user/editStato}" class="btn btn-warning">Modifica stato</a>
                     </td>
                     <td sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{/user/{id}/edit(id=*{id})}" class="btn bg-secondary">Modifica</a>
+                        <a th:href="@{/user/{id}/edit(id=*{id})}" class="btn btn-secondary">Modifica</a>
                     </td>
                 </tr>
             </tbody>

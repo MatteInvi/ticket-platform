@@ -72,7 +72,6 @@ public class TicketController {
                 }
 
             }
-
             model.addAttribute("tickets", tickets);
         }
 

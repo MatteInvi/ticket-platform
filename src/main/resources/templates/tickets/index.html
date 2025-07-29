@@ -8,99 +8,107 @@
 
     <main class="container">
         <h1 class="text-center">Indice dei ticket</h1>
-        <section class="search-bar d-flex justify-content-between mb-3">
+        <div th:if="${tickets.size() > 0}">
+            <section class="search-bar d-flex justify-content-between mb-3">
+                <div class="d-flex">
+                    <div sec:authorize="hasAuthority('ADMIN')" class="creation-button">
+                        <a th:href="@{tickets/create}" class="btn btn-primary">Crea Ticket</a>
+                    </div>
 
-            <div sec:authorize="hasAuthority('ADMIN')" class="creation-button">
-                <a th:href="@{tickets/create}" class="btn btn-primary">Crea Ticket</a>
-            </div>
-
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    Filtra
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" th:href="@{|/tickets?filtro=Da Fare|}">Da fare</a></li>
-                    <li><a class="dropdown-item" th:href="@{/tickets?filtro=In Corso}">In Corso</a></li>
-                    <li><a class="dropdown-item" th:href="@{/tickets?filtro=Completato}">Completati</a></li>
-                </ul>
-            </div>
-
-            <div class="input-group w-25">
-
-                <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/tickets}" method="GET" class="col-12 d-flex">
-
-                    <input type="search" name="keyword" class="form-control" id="cerca-ticket"
-                        placeholder="Cerca tra i ticket">
-                    <button type="submit" class="btn btn-success">Cerca</button>
-
-                </form>
-
-            </div>
-        </section>
-
-        <table class="table table-info table-striped">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Titolo ticket</th>
-                    <th>Prodotto di riferimento</th>
-                    <th>Data Creazione</th>
-                    <th>Stato</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Operatore</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="ticket : ${tickets}" th:object="${ticket}">
-                    <td>[[*{id}]]</td>
-                    <td>[[*{titolo}]]</td>
-                    <td>[[*{nomeProdotto}]]</td>
-                    <td>[[*{dataCreazione}]]</td>
-                    <td>[[*{stato}]]</td>
-                    <td sec:authorize="hasAuthority('ADMIN')">[[*{user.nome}]]</td>
-                    <td>
-                        <a th:href="@{tickets/{id}(id=*{id})}" class="btn btn-primary">Mostra</a>
-                        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{tickets/{id}/edit(id=*{id})}"
-                            class="btn btn-warning">Modifica</a>
-                        <button sec:authorize="hasAuthority('ADMIN')" class="btn btn-secondary" type="button"
-                            data-bs-toggle="modal" th:data-bs-target="'#delete-modal-'+ *{id}">
-                            Elimina
+                    <div class="dropdown mx-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Filtra
                         </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{|/tickets?filtro=Da Fare|}">Da fare</a></li>
+                            <li><a class="dropdown-item" th:href="@{/tickets?filtro=In Corso}">In Corso</a></li>
+                            <li><a class="dropdown-item" th:href="@{/tickets?filtro=Completato}">Completati</a></li>
+                        </ul>
+                    </div>
+                </div>
 
-                        <!-- Modale eliminazione ticket -->
-                        <div class="modal fade" th:id="'delete-modal-' + *{id}" data-bs-backdrop="static"
-                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminare il ticket:
-                                            <strong>"[[*{titolo}]]"</strong>
+                <div class="input-group w-25">
 
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>
-                                            Sei sicuro di voler eliminare il ticket
-                                            <strong>"[[*{titolo}]]"</strong> con id: <strong>"[[*{id}]]"</strong>?
-                                        </p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Chiudi</button>
-                                        <form th:action="@{|/tickets/*{id}/delete|}" method="post" class="d-inline">
-                                            <button type="submit" class="btn btn-danger btn">Elimina</button>
-                                        </form>
+                    <form sec:authorize="hasAuthority('ADMIN')" th:action="@{/tickets}" method="GET"
+                        class="col-12 d-flex">
+
+                        <input type="search" name="keyword" class="form-control" id="cerca-ticket"
+                            placeholder="Cerca tra i ticket">
+                        <button type="submit" class="btn btn-success">Cerca</button>
+
+                    </form>
+
+                </div>
+            </section>
+
+            <table class="table table-info table-striped">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Titolo ticket</th>
+                        <th>Prodotto di riferimento</th>
+                        <th>Data Creazione</th>
+                        <th>Stato</th>
+                        <th sec:authorize="hasAuthority('ADMIN')">Operatore</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ticket : ${tickets}" th:object="${ticket}">
+                        <td>[[*{id}]]</td>
+                        <td>[[*{titolo}]]</td>
+                        <td>[[*{nomeProdotto}]]</td>
+                        <td>[[*{dataCreazione}]]</td>
+                        <td>[[*{stato}]]</td>
+                        <td sec:authorize="hasAuthority('ADMIN')">[[*{user.nome}]]</td>
+                        <td>
+                            <a th:href="@{tickets/{id}(id=*{id})}" class="btn btn-primary">Mostra</a>
+                            <a sec:authorize="hasAuthority('ADMIN')" th:href="@{tickets/{id}/edit(id=*{id})}"
+                                class="btn btn-warning">Modifica</a>
+                            <button sec:authorize="hasAuthority('ADMIN')" class="btn btn-secondary" type="button"
+                                data-bs-toggle="modal" th:data-bs-target="'#delete-modal-'+ *{id}">
+                                Elimina
+                            </button>
+
+                            <!-- Modale eliminazione ticket -->
+                            <div class="modal fade" th:id="'delete-modal-' + *{id}" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminare il ticket:
+                                                <strong>"[[*{titolo}]]"</strong>
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Sei sicuro di voler eliminare il ticket
+                                                <strong>"[[*{titolo}]]"</strong> con id: <strong>"[[*{id}]]"</strong>?
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Chiudi</button>
+                                            <form th:action="@{|/tickets/*{id}/delete|}" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-danger btn">Elimina</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
+                        </td>
+                    </tr>
+                </tbody>
 
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+            </table>
+        </div>
 
-        </table>
+        <div th:unless="${tickets.size() > 0}">
+            <h3 class="text-center text-danger">Non ci sono ticket al momento!</h3>
+        </div>
 
 
     </main>

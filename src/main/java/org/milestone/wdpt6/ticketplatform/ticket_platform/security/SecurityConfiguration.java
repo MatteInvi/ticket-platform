@@ -20,11 +20,14 @@ public class SecurityConfiguration {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers("/tickets/create", "/tickets/*/edit").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/tickets/*/edit", "/tickets/*/delete", "/user/create", "/user/*/edit").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/tickets/*/editStato", "/user/editStato").hasAnyAuthority("ADMIN", "OPERATORE")
+                .requestMatchers(HttpMethod.POST, "/tickets/create", "/tickets/*/edit", "/tickets/*/delete",
+                        "/user/create", "/user/*/edit", "/user/*/delete")
+                .hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/tickets/*/editStato", "/user/editStato")
+                .hasAnyAuthority("ADMIN", "OPERATORE")
                 .requestMatchers("/tickets", "/tickets/*").hasAnyAuthority("OPERATORE", "ADMIN")
                 .requestMatchers("/user/editStato").hasAuthority("OPERATORE")
-                .requestMatchers("/user/create", "/user/*/edit").hasAuthority("ADMIN")
+                .requestMatchers("/user","/user/create", "/user/*/edit").hasAuthority("ADMIN")
                 .requestMatchers("/**").permitAll())
                 .formLogin(form -> form.loginPage("/login").permitAll())
                 .logout(logout -> logout
