@@ -26,7 +26,6 @@ public class TicketRestController {
 
     @GetMapping
     public ResponseEntity<List<Ticket>> index() {
-
         List<Ticket> tickets = ticketRepository.findAll();
 
         if (tickets.size() == 0) {
@@ -40,10 +39,9 @@ public class TicketRestController {
     public ResponseEntity<List<Ticket>> filtroStato(@PathVariable String stato) {
         List<Ticket> ticketFiltrati = new ArrayList<>();
         for (Ticket singleTicket : ticketRepository.findAll()) {
-            if (singleTicket.getStato().equals(stato)) {
+            if (singleTicket.getStato().equalsIgnoreCase(stato)) {
                 ticketFiltrati.add(singleTicket);
             }
-
         }
         if (ticketFiltrati.size() == 0) {
             return new ResponseEntity<>(ticketFiltrati, HttpStatus.NO_CONTENT);
@@ -55,11 +53,9 @@ public class TicketRestController {
     public ResponseEntity<List<Ticket>> filtroCategoria(@PathVariable String categoria) {
         List<Ticket> ticketFiltrati = new ArrayList<>();
         for (Ticket singleTicket : ticketRepository.findAll()) {
-            if (singleTicket.getCategory().getNome().equals(categoria)) {
+            if (singleTicket.getCategory().getNome().equalsIgnoreCase(categoria)) {
                 ticketFiltrati.add(singleTicket);
-
             }
-
         }
         if (ticketFiltrati.size() == 0) {
             return new ResponseEntity<>(ticketFiltrati, HttpStatus.NO_CONTENT);

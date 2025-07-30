@@ -20,7 +20,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "Il nome del ruole deve esistere!!")
+    @NotNull
     private String nome;
     
     @JsonBackReference

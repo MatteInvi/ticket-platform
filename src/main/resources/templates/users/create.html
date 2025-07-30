@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<head th:replace="~{fragments/head :: head('Create ticket')}">
+<head th:replace="~{fragments/head :: head('Create user')}">
 
 <body>
 
@@ -12,7 +12,7 @@
         <form th:action="@{/user}" method="POST" th:object="${user}">
             <div class="mb-3">
                 <label for="nome">Nome</label>
-                <input type="text" id="nome" class="form-control" th:field="*{nome}" th:errorClass="is-invalid" >
+                <input type="text" id="nome" class="form-control" th:field="*{nome}" th:errorClass="is-invalid">
 
                 <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback">
                     <ul>
@@ -24,7 +24,7 @@
 
             <div class="mb-3">
                 <label for="email">Email</label>
-                <input type="text" id="email" class="form-control" th:field="*{email}" th:errorClass="is-invalid" >
+                <input type="text" id="email" class="form-control" th:field="*{email}" th:errorClass="is-invalid">
                 <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
                     <ul>
                         <li th:each="error : ${#fields.errors('email')}" th:text="${error}"></li>
@@ -34,8 +34,24 @@
             </div>
 
             <div class="mb-3">
+                <label for="stato_personale">Stato</label>
+                <select type="text" id="stato_personale" class="form-select" th:field="*{statoPersonale}"
+                    th:errorClass="is-invalid">
+                    <option value="Disponibile">Disponibile</option>
+                    <option value="Non Disponibile">Non Disponibile</option>
+                </select>
+
+                <div th:if="${#fields.hasErrors('statoPersonale')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('statoPersonale')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mb-3">
                 <label for="password">Password</label>
-                <input type="password" id="password" class="form-control" th:field="*{password}" th:errorClass="is-invalid"  autocomplete="off" >
+                <input type="password" id="password" class="form-control" th:field="*{password}"
+                    th:errorClass="is-invalid" autocomplete="off">
 
                 <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
                     <ul>
@@ -46,7 +62,7 @@
 
 
 
-            
+
 
             <div class="mb-3">
                 <button class="btn btn-primary" type="submit">Crea</button>

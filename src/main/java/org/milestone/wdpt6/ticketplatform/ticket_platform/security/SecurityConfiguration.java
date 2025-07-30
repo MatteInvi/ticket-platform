@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .hasAnyAuthority("ADMIN", "OPERATORE")
                 .requestMatchers("/tickets", "/tickets/*").hasAnyAuthority("OPERATORE", "ADMIN")
                 .requestMatchers("/user/editStato").hasAuthority("OPERATORE")
-                .requestMatchers("/user","/user/create", "/user/*/edit").hasAuthority("ADMIN")
+                .requestMatchers("/user", "/user/create", "/user/*/edit").hasAuthority("ADMIN")
                 .requestMatchers("/**").permitAll())
                 .formLogin(form -> form.loginPage("/login").permitAll())
                 .logout(logout -> logout

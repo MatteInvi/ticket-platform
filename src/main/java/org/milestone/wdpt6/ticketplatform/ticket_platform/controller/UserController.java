@@ -78,7 +78,6 @@ public class UserController {
             Authentication authentication, Model model) {
         // Cerco il ruolo con id 2 (Operatore)
         Role roleOperatore = roleRepository.findById(2).get();
-        userForm.setStatoPersonale("Non disponibile");
 
         if (bindingResult.hasErrors()) {
             return "users/create";
@@ -100,8 +99,6 @@ public class UserController {
     public String edit(Model model, @PathVariable Integer id, User userDetails) {
         // Passo in modifica solo nome e email per non esporre la password cryptata
         User user = userRepository.findById(id).get();
-        user.setEmail(user.getEmail());
-        user.setNome(user.getNome());
         model.addAttribute("user", user);
         return "users/edit";
     }
@@ -120,7 +117,6 @@ public class UserController {
         }
         // Salvo l'id del ruolo nel setRoles
         // Inserisco il password encoder e salvo
-        userForm.setStatoPersonale("Non disponibile");
         userForm.setRoles((Set.of(roleOperatore)));
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(userForm);
@@ -142,9 +138,10 @@ public class UserController {
         if (userLoggato.get().getStatoPersonale().equals("Disponibile")) {
             // Se lo stato personale è attivo esegui il controllo
             // per vedere se deve completare dei ticket altrimenti non può modificarlo
-            for (Ticket singleTicket : ticketRepository.findAll()) {
+            for (Ticket singleTicket : userLoggato.get().getTickets()) {
                 if (singleTicket.getUser().equals(userLoggato.get()) && !singleTicket.getStato().equals("Completato")) {
                     isCompleted = false;
+                    break;
                 }
             }
             if (isCompleted) {

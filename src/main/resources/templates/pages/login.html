@@ -3,27 +3,29 @@
 
 <head th:replace="~{fragments/head :: head('Login')}">
 
-<body  class="bg-secondary-subtle">
+<body class="bg-secondary-subtle">
 
-   
+
     <main class="container">
-        <div class="d-flex justify-content-center mt-5">
-            <form class="col-4" th:action="@{/login}" method="POST" autocomplete="on">
-                <h2 class="text-center">Accedi</h2>
-                <div class="col">
-                    <label class="form-label" for="username">Username:</label>
-                    <input type="text" name="username" id="username" class="form-control" required>
-                </div>
-                <div class="col">
-                    <label class="form-label" for="password">Password:</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
-                </div>
-                <div th:if="${param.error}" class="text-danger mt-1">Credenziali non valide!</div>
-                <div th:if="${param.logout}" class="text-success mt-1">Logout effettuato con successo!</div>
-                <div class="col mt-3">
-                    <button type="submit" class="btn btn-primary col-12">Login</button>
-                </div>
-            </form>
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <div class="d-flex">
+                <form class="" th:action="@{/login}" method="POST" autocomplete="on">
+                    <h2 class="text-center">Accedi</h2>
+                    <div class="col">
+                        <label class="form-label" for="username">Username:</label>
+                        <input type="text" name="username" id="username" class="form-control form-control-lg" required>
+                    </div>
+                    <div class="col">
+                        <label class="form-label" for="password">Password:</label>
+                        <input type="password" name="password" id="password" class="form-control form-control-lg" required>
+                    </div>
+                    <div th:if="${param.error}" class="text-danger mt-1">Credenziali non valide!</div>
+                    <div th:if="${param.logout}" class="text-success mt-1">Logout effettuato con successo!</div>
+                    <div class="col mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg col-12">Login</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
     </main>

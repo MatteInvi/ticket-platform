@@ -19,42 +19,40 @@
             <a class="nav-link" th:href="@{/tickets}">Ticket</a>
           </li>
           <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
-            <a class="nav-link"  th:href="@{/user}">Operatori</a>
+            <a class="nav-link" th:href="@{/user}">Operatori</a>
           </li>
           <li sec:authorize="isAuthenticated()" class="nav-item">
             <a th:href="@{/user/show}" class="nav-link">Dettagli utente</a>
           </li>
 
-        </ul>          
-              
-           
-            
-              <div sec:authorize="isAuthenticated()" class="user-details text-light-emphasis">
+        </ul>
 
-                Utente: <span sec:authentication="name" class="me-3"></span>
-                Ruolo: <span sec:authentication="principal.authorities" class="me-3"></span>
+        <div sec:authorize="isAuthenticated()" class="user-details text-light-emphasis">
+
+          Utente: <span sec:authentication="name" class="me-3"></span>
+          Ruolo: <span sec:authentication="principal.authorities" class="me-3"></span>
 
 
-                <form class="d-inline" th:action="@{/logout}" method="POST">
-                  <button type="submit" class="btn btn-primary">Logout</button>
-                </form>
-                 </div>
+          <form class="d-inline" th:action="@{/logout}" method="POST">
+            <button type="submit" class="btn btn-primary">Logout</button>
+          </form>
+        </div>
 
-          
 
-         
+
+
 
         <a sec:authorize="isAnonymous()" href="/login" class="btn btn-primary btn-lg">Login</a>
 
 
-     
 
 
 
 
 
 
-    </div>
+
+      </div>
   </nav>
 
 

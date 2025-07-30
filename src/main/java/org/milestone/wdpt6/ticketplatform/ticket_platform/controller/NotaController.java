@@ -91,8 +91,7 @@ public class NotaController {
                 notaRepository.deleteById(id);
                 return "redirect:/tickets/" + idTicket;
                 // Se è un operatore elimino una nota solo se è di un suo ticket
-            } else if (ticketRepository.findById(idTicket).get().getUser() == utenteLoggato.get()
-                    && authority.getAuthority().equals("OPERATORE")) {
+            } else if (ticketRepository.findById(idTicket).get().getUser() == utenteLoggato.get()) {
                 notaRepository.deleteById(id);
                 return "redirect:/tickets/" + idTicket;
             }
