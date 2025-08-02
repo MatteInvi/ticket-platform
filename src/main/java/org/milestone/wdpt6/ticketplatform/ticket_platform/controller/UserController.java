@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import jakarta.validation.Valid;
 
 @Controller
@@ -81,7 +80,6 @@ public class UserController {
             return "users/create";
         }
 
-        // Salvo l'id del ruolo nel setRoles
         // Inserisco il password encoder e salvo
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(userForm);
@@ -106,7 +104,6 @@ public class UserController {
             return "users/edit";
         }
         
-        // Salvo l'id del ruolo nel setRoles
         // Inserisco il password encoder e salvo
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(userForm);
@@ -125,7 +122,7 @@ public class UserController {
         Optional<User> userLoggato = userRepository.findByEmail(authentication.getName());
         boolean isCompleted = true;
 
-        if (userLoggato.get().getStatoPersonale().equals("Disponibile")) {
+        if (userLoggato.get().getStatoPersonale().equals("Disponibile") && userForm.getStatoPersonale().equals("Non Disponibile")) {
             // Se lo stato personale è attivo esegui il controllo
             // per vedere se deve completare dei ticket altrimenti non può modificarlo
             for (Ticket singleTicket : userLoggato.get().getTickets()) {
@@ -142,7 +139,7 @@ public class UserController {
                 userRepository.save(userForm);
                 return "redirect:/user/show";
             }
-            // Non cambia lo stato se deve completare dei ticket
+            // Non cambia lo stato se deve completare dei ticket e mostra un errore
             bindingResult.rejectValue("statoPersonale", "error.utente",
                     "Non puoi cambiare il tuo stato se hai ticket aperti!");
             return "users/editStato";
@@ -152,7 +149,6 @@ public class UserController {
         // e la password che non viene caricato dal form)
         userForm.setRoles(userLoggato.get().getRoles());
         userForm.setPassword(userLoggato.get().getPassword());
-
         userRepository.save(userForm);
         return "redirect:/user/show";
     }
@@ -160,15 +156,15 @@ public class UserController {
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
-        // Creo una lista di note per ogni ticket di questo utente e le elimino
-        // Successivamente elimino il ticket
+        // Creo una lista di note per ogni ticket di questo utente e le elimino        
         List<Ticket> userTickets = ticketRepository.findByUser(user.get());
         for (Ticket singleTicket : userTickets) {
             List<Nota> ticketNotes = notaRepository.findByTicket(singleTicket);
             notaRepository.deleteAll(ticketNotes);
         }
+        // Successivamente elimino il ticket
         ticketRepository.deleteAll(userTickets);
-
+        // In fine elimino l'utente
         userRepository.deleteById(id);
         return "redirect:/user";
     }

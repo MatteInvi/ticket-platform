@@ -200,9 +200,8 @@ public class TicketController {
                 model.addAttribute("ticket", ticketRepository.findById(id).get());
                 model.addAttribute("nota", nota);
                 return "note/create";
-                // Se è un operatore creo la nota solo se il ticket è assegnato a lui
-            } else if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()
-                    && authority.getAuthority().equals("OPERATORE")) {
+            // Se è un operatore creo la nota solo se il ticket è assegnato a lui
+            } else if (ticketRepository.findById(id).get().getUser() == utenteLoggato.get()) {
                 nota.setDataCreazione(LocalDateTime.now());
                 nota.setTicket(ticketRepository.findById(id).get());
                 nota.setUser(utenteLoggato.get());
@@ -211,6 +210,7 @@ public class TicketController {
                 return "note/create";
             }
         }
+
 
         return "HttpStatus.NOT_FOUND";
 

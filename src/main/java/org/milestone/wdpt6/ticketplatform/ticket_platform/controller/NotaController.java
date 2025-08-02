@@ -55,7 +55,7 @@ public class NotaController {
             if (authority.getAuthority().equals("ADMIN")) {
                 model.addAttribute("nota", notaRepository.findById(id).get());
                 return "note/edit";
-                // Se è un operatore modifico una nota solo se è di un suo ticket
+            // Se è un operatore modifico una nota solo se è di un suo ticket
             } else if (ticketRepository.findById(idTicket).get().getUser() == utenteLoggato.get()) {
                 model.addAttribute("nota", notaRepository.findById(id).get());
                 return "note/edit";
@@ -69,7 +69,7 @@ public class NotaController {
     @PostMapping("/{id}")
     public String update(@PathVariable Integer id, @Valid @ModelAttribute("nota") Nota formNota,
             BindingResult bindingResult, Model model) {
-        Integer idTicket = formNota.getTicket().getId();
+        int idTicket = formNota.getTicket().getId();
         if (bindingResult.hasErrors()) {
             model.addAttribute("nota", formNota);
             return "nota/edit";
@@ -89,7 +89,7 @@ public class NotaController {
             if (authority.getAuthority().equals("ADMIN")) {
                 notaRepository.deleteById(id);
                 return "redirect:/tickets/" + idTicket;
-                // Se è un operatore elimino una nota solo se è di un suo ticket
+            // Se è un operatore elimino una nota solo se è di un suo ticket
             } else if (ticketRepository.findById(idTicket).get().getUser() == utenteLoggato.get()) {
                 notaRepository.deleteById(id);
                 return "redirect:/tickets/" + idTicket;
