@@ -3,10 +3,7 @@ package org.milestone.wdpt6.ticketplatform.ticket_platform.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Nota;
-import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Role;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.User;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.NotaRepository;
@@ -14,7 +11,6 @@ import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.RoleReposit
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.TicketRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -76,8 +72,6 @@ public class UserController {
     @PostMapping
     public String store(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult,
             Authentication authentication, Model model) {
-        // Cerco il ruolo con id 2 (Operatore)
-        Role roleOperatore = roleRepository.findById(2).get();
 
         if (bindingResult.hasErrors()) {
             return "users/create";
@@ -89,14 +83,13 @@ public class UserController {
 
         // Salvo l'id del ruolo nel setRoles
         // Inserisco il password encoder e salvo
-        userForm.setRoles((Set.of(roleOperatore)));
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(userForm);
         return "redirect:/user";
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable Integer id, User userDetails) {
+    public String edit(Model model, @PathVariable Integer id) {
         // Passo in modifica solo nome e email per non esporre la password cryptata
         User user = userRepository.findById(id).get();
         model.addAttribute("user", user);
@@ -104,10 +97,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}/edit")
-    public String update(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult, Model model) {
-        // Cerco il ruolo con id 2 (Operatore)
-        Role roleOperatore = roleRepository.findById(2).get();
-
+    public String update(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult,Authentication authentication, Model model) {
         if (bindingResult.hasErrors()) {
             return "users/edit";
         }
@@ -115,9 +105,9 @@ public class UserController {
             bindingResult.rejectValue("email", "error.user", "Email già registrata da un altro utente");
             return "users/edit";
         }
+        
         // Salvo l'id del ruolo nel setRoles
         // Inserisco il password encoder e salvo
-        userForm.setRoles((Set.of(roleOperatore)));
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(userForm);
         return "redirect:/user";

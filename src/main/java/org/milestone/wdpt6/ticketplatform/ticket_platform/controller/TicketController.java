@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Nota;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.User;

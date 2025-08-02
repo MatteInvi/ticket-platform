@@ -2,7 +2,6 @@ package org.milestone.wdpt6.ticketplatform.ticket_platform.controller.API;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.CategoryRepository;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.TicketRepository;

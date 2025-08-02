@@ -21,7 +21,7 @@
 
                 <div th:if="${#fields.hasErrors('statoPersonale')}" class="invalid-feedback">
                     <ul>
-                        <li th:each="error : ${#fields.errors('statoPersonale')}" th:text="${error}"></li>
+                        <li class="list-group-item" th:each="error : ${#fields.errors('statoPersonale')}" th:text="${error}"></li>
                     </ul>
                 </div>
             </div>

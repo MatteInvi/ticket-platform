@@ -24,7 +24,7 @@
 
             <div class="mb-3">
                 <label for="testo_nota">Testo nota:</label>
-                <textarea id="test_nota" class="form-control" th:field="*{testoNota}" th:errorClass="is-invalid" required>
+                <textarea id="test_nota" class="form-control" rows="4" th:field="*{testoNota}" th:errorClass="is-invalid" required>
                 </textarea>
 
                 <div th:if="${#fields.hasErrors('testoNota')}" class="invalid-feedback">

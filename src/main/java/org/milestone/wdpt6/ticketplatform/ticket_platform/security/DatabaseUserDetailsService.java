@@ -1,7 +1,6 @@
 package org.milestone.wdpt6.ticketplatform.ticket_platform.security;
 
 import java.util.Optional;
-
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.User;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

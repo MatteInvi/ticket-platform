@@ -51,6 +51,21 @@
             </div>
 
             <div class="mb-3">
+                <label for="ruolo">Ruolo</label>
+                <select type="text" id="ruolo" class="form-select" th:field="*{roles}"
+                    th:errorClass="is-invalid">
+                    <option value="1">ADMIN</option>
+                    <option value="2">OPERATORE</option>
+                </select>
+
+                <div th:if="${#fields.hasErrors('roles')}" class="invalid-feedback">
+                    <ul>
+                        <li th:each="error : ${#fields.errors('roles')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mb-3">
                 <label for="password">Password</label>
                 <input type="password" id="password" class="form-control" th:field="*{password}"
                     th:errorClass="is-invalid" autocomplete="off">
