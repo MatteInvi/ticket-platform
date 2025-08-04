@@ -55,7 +55,7 @@ public class TicketController {
                 if (keyword != null && !keyword.isEmpty()) {
                     tickets = ticketRepository.findByTitoloContainingIgnoreCase(keyword);
                 } else {
-                    tickets = ticketRepository.findAll(Sort.by(Sort.Direction.ASC, "stato"));
+                    tickets = ticketRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
                 }
                 if (filtro != null && !filtro.isEmpty()) {
                     tickets = ticketRepository.findByStato(filtro);
