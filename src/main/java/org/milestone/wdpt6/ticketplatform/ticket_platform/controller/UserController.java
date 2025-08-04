@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Nota;
+import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Role;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.Ticket;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.model.User;
 import org.milestone.wdpt6.ticketplatform.ticket_platform.repository.NotaRepository;
@@ -64,6 +65,8 @@ public class UserController {
     @GetMapping("/create")
     public String create(Model model) {
         User nuovoUtente = new User();
+        List<Role> ruoli = roleRepository.findAll();
+        model.addAttribute("roles", ruoli);
         model.addAttribute("user", nuovoUtente);
         return "users/create";
     }
@@ -71,8 +74,9 @@ public class UserController {
     @PostMapping
     public String store(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult,
             Authentication authentication, Model model) {
-
+        List<Role> ruoli = roleRepository.findAll();
         if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", ruoli);
             return "users/create";
         }
         if (userRepository.existsByEmail(userForm.getEmail())) {
@@ -90,20 +94,25 @@ public class UserController {
     public String edit(Model model, @PathVariable Integer id) {
         // Passo in modifica solo nome e email per non esporre la password cryptata
         User user = userRepository.findById(id).get();
+        List<Role> ruoli = roleRepository.findAll();
+        model.addAttribute("roles", ruoli);
         model.addAttribute("user", user);
         return "users/edit";
     }
 
     @PostMapping("/{id}/edit")
-    public String update(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult,Authentication authentication, Model model) {
+    public String update(@Valid @ModelAttribute("user") User userForm, BindingResult bindingResult,
+            Authentication authentication, Model model) {
+        List<Role> ruoli = roleRepository.findAll();
         if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", ruoli);
             return "users/edit";
         }
         if (userRepository.existsByEmailAndIdNot(userForm.getEmail(), userForm.getId())) {
             bindingResult.rejectValue("email", "error.user", "Email già registrata da un altro utente");
             return "users/edit";
         }
-        
+
         // Inserisco il password encoder e salvo
         userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userRepository.save(userForm);
@@ -122,7 +131,8 @@ public class UserController {
         Optional<User> userLoggato = userRepository.findByEmail(authentication.getName());
         boolean isCompleted = true;
 
-        if (userLoggato.get().getStatoPersonale().equals("Disponibile") && userForm.getStatoPersonale().equals("Non Disponibile")) {
+        if (userLoggato.get().getStatoPersonale().equals("Disponibile")
+                && userForm.getStatoPersonale().equals("Non Disponibile")) {
             // Se lo stato personale è attivo esegui il controllo
             // per vedere se deve completare dei ticket altrimenti non può modificarlo
             for (Ticket singleTicket : userLoggato.get().getTickets()) {
@@ -156,7 +166,7 @@ public class UserController {
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
-        // Creo una lista di note per ogni ticket di questo utente e le elimino        
+        // Creo una lista di note per ogni ticket di questo utente e le elimino
         List<Ticket> userTickets = ticketRepository.findByUser(user.get());
         for (Ticket singleTicket : userTickets) {
             List<Nota> ticketNotes = notaRepository.findByTicket(singleTicket);

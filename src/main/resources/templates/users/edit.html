@@ -52,10 +52,8 @@
 
             <div class="mb-3">
                 <label for="ruolo">Ruolo</label>
-                <select type="text" id="ruolo" class="form-select" th:field="*{roles}"
-                    th:errorClass="is-invalid">
-                    <option value="1">ADMIN</option>
-                    <option value="2">OPERATORE</option>
+                <select type="text" id="ruolo" class="form-select" th:field="*{roles}" th:errorClass="is-invalid">
+                    <option th:each="role : ${roles}" th:value="${role.id}">[[${role.nome}]]</option>
                 </select>
 
                 <div th:if="${#fields.hasErrors('roles')}" class="invalid-feedback">
